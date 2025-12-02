@@ -389,15 +389,22 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
-// Frontend Statik Dosyalarını Sunma (Production için)
-const distPath = path.join(__dirname, '../dist');
-app.use(express.static(distPath));
+// Frontend Statik Dosyalarını Sunma (Production için - Render vb. için)
+// Vercel'de bu kısmı Vercel'in kendi routing mekanizması halleder, o yüzden Vercel'de çalışmaz.
+if (!process.env.VERCEL) {
+  const distPath = path.join(__dirname, '../dist');
+  app.use(express.static(distPath));
 
-// Tüm diğer istekleri index.html'e yönlendir (SPA için)
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
-});
+  // Tüm diğer istekleri index.html'e yönlendir (SPA için)
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
 
-app.listen(PORT, () => {
-  console.log(`Server ${PORT} portunda çalışıyor`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server ${PORT} portunda çalışıyor`);
+  });
+}
+
+export default app;
