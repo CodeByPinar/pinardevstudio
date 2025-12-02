@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node": "^22.14.0",
+    "@vercel/analytics": "^1.6.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.4.22",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.8.0",
     "cors": "^2.8.5",
@@ -18,15 +22,12 @@
     "lucide-react": "^0.555.0",
     "multer": "^2.0.2",
     "pg": "^8.16.3",
+    "postcss": "^8.5.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "streamifier": "^0.1.1",
-    "vite": "^6.4.1",
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "autoprefixer": "^10.4.22",
-    "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
-    "typescript": "~5.8.2"
+    "typescript": "~5.8.2",
+    "vite": "^6.4.1"
   }
 }
