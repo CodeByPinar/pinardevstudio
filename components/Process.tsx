@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 const Process: React.FC = () => {
   const steps = [
@@ -10,7 +10,7 @@ const Process: React.FC = () => {
     {
       number: "02",
       title: "Strateji",
-      description: "Projenin olceklenebilir ve etkili olmasi icin yol haritasi ve teknik yaklasimi belirleriz."
+      description: "Projenin ölçeklenebilir ve etkili olmasi icin yol haritasi ve teknik yaklasimi belirleriz."
     },
     {
       number: "03",
@@ -19,7 +19,7 @@ const Process: React.FC = () => {
     },
     {
       number: "04",
-      title: "Gelistirme",
+      title: "Geliştirme",
       description: "Modern web teknolojileriyle temiz ve performansli kod yazarak tasarimi hayata geciririz."
     }
   ];

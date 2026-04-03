@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import ProjectModal from './ProjectModal';
@@ -9,17 +9,17 @@ interface ProjectsProps {
 }
 
 const Projects: React.FC<ProjectsProps> = ({ projects }) => {
-  const [filter, setFilter] = useState("Tum");
+  const [filter, setFilter] = useState("Tüm");
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
-  const filteredProjects = filter === "Tum"
+  const filteredProjects = filter === "Tüm"
     ? projects
     : projects.filter(p => {
         if (filter === "Veri") return p.type === "Data" || p.type === "Veri";
         return p.type === filter;
       });
 
-  const filters = ["Tum", "Backend", "Frontend", "Veri"];
+  const filters = ["Tüm", "Backend", "Frontend", "Veri"];
 
   return (
     <section id="portfolio" className="py-32 bg-white relative">
@@ -106,7 +106,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
         {/* Footer Link */}
         <div className="mt-32 text-center">
              <a href="https://github.com/CodeByPinar" target="_blank" rel="noreferrer" className="group relative inline-flex items-center gap-2 text-xl font-bold text-black overflow-hidden">
-               <span className="relative z-10 border-b-2 border-black pb-1 group-hover:text-brand-green group-hover:border-brand-green transition-colors">GitHub'da Tum Projeleri Gor</span>
+               <span className="relative z-10 border-b-2 border-black pb-1 group-hover:text-brand-green group-hover:border-brand-green transition-colors">GitHub'da Tüm Projeleri Gor</span>
                <ArrowUpRight className="relative z-10 w-5 h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
              </a>
         </div>
@@ -123,3 +123,4 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
 };
 
 export default Projects;
+

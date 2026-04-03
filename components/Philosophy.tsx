@@ -1,12 +1,12 @@
-
+﻿
 import React from 'react';
 import { Check, ArrowRight, Code2 } from 'lucide-react';
 
 const Philosophy: React.FC = () => {
   const values = [
-    { title: "Clean Architecture ve SOLID", desc: "En iyi kodlama pratikleriyle olceklenebilir ve surdurulebilir sistemler gelistiririm." },
+    { title: "Clean Architecture ve SOLID", desc: "En iyi kodlama pratikleriyle ölçeklenebilir ve surdurulebilir sistemler gelistiririm." },
     { title: "Agile ve Scrum", desc: "Ekiplerle etkili calisip iteratif ve yuksek kaliteli urun teslim ederim." },
-    { title: "Surekli Ogrenme", desc: "Gelisen teknolojiye ayak uydurmak icin teknik bilgi birikimimi surekli guncellerim." }
+    { title: "Surekli Ogrenme", desc: "Gelisen teknolojiye ayak uydurmak icin teknik bilgi birikimimi surekli güncellerim." }
   ];
 
   return (
@@ -62,7 +62,7 @@ const Philosophy: React.FC = () => {
              {/* Floating Badge 1: Experience (Top Right) */}
              <div className="absolute -top-6 -right-4 lg:-right-10 bg-white p-6 rounded-2xl shadow-[8px_8px_0px_rgba(0,0,0,1)] border-2 border-black z-20 animate-float">
                 <p className="text-5xl font-extrabold text-black mb-1">04<span className="text-brand-lime">+</span></p>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Yillik<br/>Deneyim</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Yıllık<br/>Deneyim</p>
              </div>
 
              {/* Floating Badge 2: Tech (Bottom Left) */}
@@ -85,11 +85,11 @@ const Philosophy: React.FC = () => {
              </div>
             
             <h2 className="text-5xl md:text-6xl font-extrabold text-black mb-8 leading-[1.05] tracking-tight">
-              Cozumleri <span className="relative inline-block text-brand-black px-2 italic bg-brand-lime skew-x-[-10deg]">titizlikle</span> gelistiriyorum.
+              Çözümleri <span className="relative inline-block text-brand-black px-2 italic bg-brand-lime skew-x-[-10deg]">titizlikle</span> gelistiriyorum.
             </h2>
             
             <p className="text-xl text-gray-600 mb-10 leading-relaxed font-medium">
-              Clean Architecture gibi en iyi pratiklere bagli kalarak kaliteli cozumler uretiyorum. Mikroservis mimarisi, guvenli JWT kimlik dogrulama ve full-stack performans optimizasyonu temel uzmanlik alanlarimdir.
+              Clean Architecture gibi en iyi pratiklere bagli kalarak kaliteli çözümler üretiyorum. Mikroservis mimarisi, güvenli JWT kimlik dogrulama ve full-stack performans optimizasyonu temel uzmanlik alanlarimdir.
             </p>
 
             <div className="space-y-8 mb-12">
@@ -119,3 +119,4 @@ const Philosophy: React.FC = () => {
 };
 
 export default Philosophy;
+

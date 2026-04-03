@@ -1,12 +1,12 @@
-import React from 'react';
+﻿import React from 'react';
 
 const Experience: React.FC = () => {
   const jobs = [
     {
       company: "QMIND SOLUTIONS",
       role: "Veri Bilimci",
-      period: "Nis 2021 — Guncel",
-      desc: "Makine ogrenmesi ve veri analitigi projelerinde uctan uca veri isleme, model gelistirme ve degerlendirme sureclerini yonettim. Gercek zamanli karar destek sistemleri icin regresyon, siniflandirma ve zaman serisi modelleri gelistirdim. Python, Pandas, NumPy ve Scikit-learn kullanarak optimizasyon yapip gorsellestirme panelleri hazirladim."
+      period: "Nis 2021 — Güncel",
+      desc: "Makine ogrenmesi ve veri analitigi projelerinde uctan uca veri isleme, model geliştirme ve degerlendirme sureclerini yonettim. Gercek zamanli karar destek sistemleri icin regresyon, siniflandirma ve zaman serisi modelleri gelistirdim. Python, Pandas, NumPy ve Scikit-learn kullanarak optimizasyon yapip gorsellestirme panelleri hazirladim."
     },
     {
       company: "RADICALX",
@@ -16,15 +16,15 @@ const Experience: React.FC = () => {
     },
     {
       company: "TECHIOSITY TECHNOLOGY",
-      role: "Yazilim Gelistirici",
+      role: "Yazılim Geliştirici",
       period: "Sub 2023 — Mar 2023",
       desc: "Java backend modullerine ucuncu taraf API entegrasyonlari yaparak sistem yeteneklerini genislettim. Hata ayiklama, refaktor ve performans iyilestirmeleri gerceklestirdim. Angular UI bilesenlerini gelistirip frontend-backend entegrasyonunu RESTful servisler uzerinden optimize ettim."
     },
     {
       company: "DIGITAL HELP",
-      role: "Web Gelistirici",
+      role: "Web Geliştirici",
       period: "Ara 2022 — Sub 2023",
-      desc: "HTML, JavaScript, AJAX ve JSON kullanarak mockup'lardan kullanici dostu web arayuzleri gelistirdim. Cok adimli formlar, dinamik icerik yukleme modulleri olusturdum; UI bilesenlerini masaustu ve mobil cihazlar icin optimize ettim."
+      desc: "HTML, JavaScript, AJAX ve JSON kullanarak mockup'lardan kullanici dostu web arayuzleri gelistirdim. Cok adimli formlar, dinamik içerik yukleme modulleri olusturdum; UI bilesenlerini masaustu ve mobil cihazlar icin optimize ettim."
     }
   ];
 

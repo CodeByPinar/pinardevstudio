@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState } from 'react';
 import Button from './ui/Button';
 import { Send, CheckCircle, ArrowRight } from 'lucide-react';
@@ -11,7 +11,7 @@ const Proposal: React.FC<ProposalProps> = ({ onSendMessage }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    service: 'Full-Stack Gelistirme',
+    service: 'Full-Stack Geliştirme',
     budget: '$1k - $5k',
     message: ''
   });
@@ -19,7 +19,7 @@ const Proposal: React.FC<ProposalProps> = ({ onSendMessage }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const services = [
-    "Full-Stack Gelistirme",
+    "Full-Stack Geliştirme",
     "Backend Mimarisi",
     "Veri Bilimi ve Yapay Zeka",
     "UI/UX Tasarim",
@@ -179,7 +179,7 @@ const Proposal: React.FC<ProposalProps> = ({ onSendMessage }) => {
               </div>
 
               <div className="space-y-3">
-                 <label className="text-sm font-bold text-gray-900 uppercase tracking-wider">Butce Araligi</label>
+                 <label className="text-sm font-bold text-gray-900 uppercase tracking-wider">Bütçe Araligi</label>
                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     {budgets.map((b) => (
                       <button
@@ -233,3 +233,4 @@ const Proposal: React.FC<ProposalProps> = ({ onSendMessage }) => {
 };
 
 export default Proposal;
+

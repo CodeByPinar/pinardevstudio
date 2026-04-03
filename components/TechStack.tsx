@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import { Code2, Server, Database, Globe, Cpu, Layers, Box, Terminal, Coffee, Container, Braces } from 'lucide-react';
 
@@ -8,7 +8,7 @@ const TechStack: React.FC = () => {
       name: 'ASP.NET Core',
       category: 'Backend Catisi',
       icon: Server,
-      description: 'Yuksek performansli, platformlar arasi web API ve olceklenebilir sunucu uygulamalari gelistirme.'
+      description: 'Yuksek performansli, platformlar arasi web API ve ölçeklenebilir sunucu uygulamaları geliştirme.'
     },
     {
       name: 'React Ecosystem',
@@ -20,7 +20,7 @@ const TechStack: React.FC = () => {
       name: 'C# & .NET',
       category: 'Temel Dil',
       icon: Terminal,
-      description: 'Kurumsal olcekte guclu cozumler icin tip guvenligi ve nesne yonelimli yaklasimdan yararlanma.'
+      description: 'Kurumsal olcekte guclu çözümler icin tip güvenligi ve nesne yonelimli yaklasimdan yararlanma.'
     },
     {
       name: 'Microservices',
@@ -32,7 +32,7 @@ const TechStack: React.FC = () => {
       name: 'Python & AI',
       category: 'Veri Bilimi',
       icon: Cpu,
-      description: 'Pandas ve Scikit-learn ile makine ogrenmesi modelleri ve veri isleme hatlari gelistirme.'
+      description: 'Pandas ve Scikit-learn ile makine ogrenmesi modelleri ve veri isleme hatlari geliştirme.'
     },
     {
       name: 'SQL & Databases',
@@ -44,13 +44,13 @@ const TechStack: React.FC = () => {
       name: 'Angular',
       category: 'Frontend Catisi',
       icon: Globe,
-      description: 'TypeScript ile yapisal ve kurumsal olcekte single-page uygulamalar gelistirme.'
+      description: 'TypeScript ile yapisal ve kurumsal olcekte single-page uygulamalar geliştirme.'
     },
     {
       name: 'Java Spring',
       category: 'Backend Catisi',
       icon: Coffee,
-      description: 'Spring Boot ile guvenli ve islemsel backend sistemleri gelistirme deneyimi.'
+      description: 'Spring Boot ile güvenli ve islemsel backend sistemleri geliştirme deneyimi.'
     }
   ];
 
@@ -92,3 +92,4 @@ const TechStack: React.FC = () => {
 };
 
 export default TechStack;
+

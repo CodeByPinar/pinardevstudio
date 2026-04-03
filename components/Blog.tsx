@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useMemo } from 'react';
 import { Calendar, Clock, ArrowRight, Eye, Hash } from 'lucide-react';
 import BlogModal from './BlogModal';
@@ -10,17 +10,17 @@ interface BlogProps {
 
 const Blog: React.FC<BlogProps> = ({ posts }) => {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [selectedTag, setSelectedTag] = useState<string>("Tum");
+  const [selectedTag, setSelectedTag] = useState<string>("Tüm");
 
   // Extract unique tags
   const allTags = useMemo(() => {
     const tags = new Set<string>();
     posts.forEach(post => post.tags.forEach(tag => tags.add(tag)));
-    return ["Tum", ...Array.from(tags)];
+    return ["Tüm", ...Array.from(tags)];
   }, [posts]);
 
   // Filter posts
-  const filteredPosts = selectedTag === "Tum" 
+  const filteredPosts = selectedTag === "Tüm" 
     ? posts 
     : posts.filter(post => post.tags.includes(selectedTag));
 
@@ -34,12 +34,12 @@ const Blog: React.FC<BlogProps> = ({ posts }) => {
         {/* Header & Filter */}
         <div className="flex flex-col lg:flex-row justify-between items-end mb-20 gap-10">
           <div className="max-w-2xl">
-            <span className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2 block">Icerikler ve Notlar</span>
+            <span className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2 block">İçerikler ve Notlar</span>
             <h2 className="text-4xl md:text-6xl font-extrabold text-black mb-6 tracking-tight">
-              Son Yazilar
+              Son Yazılar
             </h2>
             <p className="text-gray-500 text-lg leading-relaxed">
-              .NET mimarisi, React desenleri ve yazilimda yapay zekanin gelecegi uzerine teknik icerikler.
+              .NET mimarisi, React desenleri ve yazılimda yapay zekanin gelecegi uzerine teknik içerikler.
             </p>
           </div>
 
@@ -64,12 +64,12 @@ const Blog: React.FC<BlogProps> = ({ posts }) => {
         {/* Empty State */}
         {filteredPosts.length === 0 && (
             <div className="text-center py-20 bg-white rounded-[2rem] border border-gray-100">
-                <p className="text-gray-400 text-lg">Bu kategori icin yazi bulunamadi.</p>
+                <p className="text-gray-400 text-lg">Bu kategori icin yazı bulunamadi.</p>
                 <button 
-                  onClick={() => setSelectedTag("Tum")} 
+                  onClick={() => setSelectedTag("Tüm")} 
                     className="mt-4 text-black font-bold underline decoration-brand-lime"
                 >
-                  Tum Yazilari Gor
+                  Tüm Yazıları Gor
                 </button>
             </div>
         )}
@@ -151,3 +151,4 @@ const Blog: React.FC<BlogProps> = ({ posts }) => {
 };
 
 export default Blog;
+

@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect } from 'react';
 import { X, Calendar, Clock, Eye, User } from 'lucide-react';
 import { BlogPost } from '../types';
@@ -16,7 +16,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
       document.body.style.overflow = 'hidden';
       // Simulate SEO Title Update
       const prevTitle = document.title;
-      document.title = `${post.title} | Pinar Tech Yazilar`;
+      document.title = `${post.title} | Pinar Tech Yazılar`;
       
       return () => {
         document.body.style.overflow = '';
@@ -48,7 +48,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
 
   const author = post.author || {
       name: "Pınar Topuz",
-      role: "Full-Stack Gelistirici",
+      role: "Full-Stack Geliştirici",
       avatar: "https://ui-avatars.com/api/?name=Pinar+Topuz&background=000&color=fff"
   };
 
@@ -118,7 +118,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
                 </div>
                 <div className="flex items-center gap-2">
                     <Eye size={18} />
-                    <span>{post.views ? post.views.toLocaleString() : '1,204'} Goruntulenme</span>
+                    <span>{post.views ? post.views.toLocaleString() : '1,204'} Görüntülenme</span>
                 </div>
             </div>
 
@@ -138,7 +138,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
                         <p className="font-bold text-xl text-black mb-1">{author.name}</p>
                         <p className="text-sm text-brand-green font-bold uppercase mb-3">{author.role}</p>
                         <p className="text-gray-600 text-sm leading-relaxed">
-                          .NET ve React ekosistemlerinde uzmanlasmis deneyimli bir Full-Stack gelistirici. Clean architecture, yapay zeka entegrasyonu ve teknik bilgi paylasimi konularinda tutkuludur.
+                            .NET ve React ekosistemlerinde uzmanlaşmış deneyimli bir Full-Stack geliştirici. Clean architecture, yapay zeka entegrasyonu ve teknik bilgi paylaşımı konularında tutkuludur.
                         </p>
                     </div>
                 </div>
@@ -150,3 +150,4 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
 };
 
 export default BlogModal;
+

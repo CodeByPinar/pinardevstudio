@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState } from 'react';
 import { Database, Layout, Code, ArrowRight } from 'lucide-react';
 import ServiceModal, { ServiceData } from './ServiceModal';
@@ -8,15 +8,15 @@ const Services: React.FC = () => {
 
   const services: ServiceData[] = [
     {
-      title: "Full-Stack Gelistirme",
+      title: "Full-Stack Geliştirme",
       icon: Layout,
-      description: "ASP.NET Core, React ve Angular ile olceklenebilir web uygulamalari gelistiriyor; hizli ve kullanici dostu arayuzler sunuyorum.",
-      detailedDescription: "Uctan uca web uygulama gelistirme hizmeti sunuyorum. Fikir asamasindan UI/UX tasarimina, frontend uygulamadan backend entegrasyonuna kadar tum sureci yonetiyorum. Odagim; yuksek performansli, SEO uyumlu ve tum cihazlarda sorunsuz calisan responsive urunler olusturmaktir.",
+      description: "ASP.NET Core, React ve Angular ile ölçeklenebilir web uygulamaları gelistiriyor; hizli ve kullanici dostu arayuzler sunuyorum.",
+      detailedDescription: "Uctan uca web uygulama geliştirme hizmeti sunuyorum. Fikir asamasindan UI/UX tasarimina, frontend uygulamadan backend entegrasyonuna kadar tüm sureci yonetiyorum. Odagim; yuksek performansli, SEO uyumlu ve tüm cihazlarda sorunsuz calisan responsive urunler olusturmaktir.",
       color: "text-blue-600",
       bg: "group-hover:bg-blue-50",
       features: [
-        "Tek Sayfa Uygulamalari (SPA)",
-        "Asamali Web Uygulamalari (PWA)",
+        "Tek Sayfa Uygulamaları (SPA)",
+        "Asamali Web Uygulamaları (PWA)",
         "Responsive UI/UX Uygulamasi",
         "Sunucu Tarafli Render (Next.js)",
         "Tarayicilar Arasi Uyumluluk"
@@ -27,7 +27,7 @@ const Services: React.FC = () => {
       title: "Backend ve Mikroservis",
       icon: Code,
       description: "Saglam RESTful API'ler tasarlayip JWT kimlik dogrulama uygular, Java ve C# ile mikroservis mimarileri kuruyorum.",
-      detailedDescription: "Guvenli ve olceklenebilir sunucu tarafi sistem mimarileri kurma konusunda uzmanim. Startup icin monolitik API de, kurumsal yapi icin daginik mikroservis mimarisi de gerekiyorsa; kod kalitesi, guvenlik ve performans optimizasyonunu birlikte sagliyorum.",
+      detailedDescription: "Güvenli ve ölçeklenebilir sunucu tarafi sistem mimarileri kurma konusunda uzmanim. Startup icin monolitik API de, kurumsal yapi icin daginik mikroservis mimarisi de gerekiyorsa; kod kalitesi, güvenlik ve performans optimizasyonunu birlikte sagliyorum.",
       color: "text-green-600",
       bg: "group-hover:bg-green-50",
       features: [
@@ -42,7 +42,7 @@ const Services: React.FC = () => {
     {
       title: "Veri Bilimi ve Yapay Zeka",
       icon: Database,
-      description: "Python (Pandas, NumPy) ile makine ogrenmesi modelleri gelistiriyor, veriyi isleyip veriye dayali icgoruler uretiyorum.",
+      description: "Python (Pandas, NumPy) ile makine ogrenmesi modelleri gelistiriyor, veriyi isleyip veriye dayali icgoruler üretiyorum.",
       detailedDescription: "Gelismis analitik ve yapay zeka entegrasyonu ile verinizin potansiyelini ortaya cikariyorum. Isletmelerin sureclerini otomatiklestirmesine, trendleri tahmin etmesine ve ozel ML modelleri ile veri gorsellestirme panelleri sayesinde aksiyon alinabilir icgoruler elde etmesine destek oluyorum.",
       color: "text-purple-600",
       bg: "group-hover:bg-purple-50",
@@ -50,7 +50,7 @@ const Services: React.FC = () => {
         "Tahminleme ve Ongorulu Modellemler",
         "Dogal Dil Isleme (NLP)",
         "Veri Gorsellestirme Panelleri",
-        "ETL Hatti Gelistirme",
+        "ETL Hatti Geliştirme",
         "API Uzerinden AI Model Entegrasyonu"
       ],
       technologies: ["Python", "Pandas", "Scikit-learn", "TensorFlow", "Matplotlib", "SQL"]
@@ -67,7 +67,7 @@ const Services: React.FC = () => {
             Teknik Yetkinlikler
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-            Guvenli, olceklenebilir ve verimli yazilim cozumleri icin modern teknolojiler kullaniyorum.
+            Güvenli, ölçeklenebilir ve verimli yazılim çözümleri icin modern teknolojiler kullaniyorum.
           </p>
         </div>
 
@@ -109,3 +109,4 @@ const Services: React.FC = () => {
 };
 
 export default Services;
+

@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Button from './ui/Button';
@@ -12,7 +12,7 @@ const Navbar: React.FC = () => {
     { name: 'Deneyim', href: '#experience' },
     { name: 'Projeler', href: '#portfolio' },
     { name: 'Teklif', href: '#proposal' },
-    { name: 'Iletisim', href: '#contact' },
+    { name: 'İletişim', href: '#contact' },
   ];
 
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
           {/* Logo */}
           <a href="#" className="flex-shrink-0 flex items-center gap-1 cursor-pointer group">
             <span className="font-bold text-xl tracking-tight group-hover:opacity-80 transition-opacity">Pınar.</span>
-            <span className="bg-brand-lime px-2 py-0.5 rounded-full text-xs font-bold border border-black/5 group-hover:scale-105 transition-transform">Yazilim Studio</span>
+            <span className="bg-brand-lime px-2 py-0.5 rounded-full text-xs font-bold border border-black/5 group-hover:scale-105 transition-transform">Yazılim Studio</span>
           </a>
 
           {/* Desktop Menu */}
@@ -100,3 +100,4 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+

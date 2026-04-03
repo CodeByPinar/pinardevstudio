@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import Button from './ui/Button';
 import { ArrowDown } from 'lucide-react';
@@ -65,7 +65,7 @@ const Hero: React.FC = () => {
         <h1 className="text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter text-black mb-8 leading-[0.9] animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           Full-Stack<br />
           <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-black via-gray-700 to-black">
-            Gelistirici
+            Geliştirici
             {/* Underline decoration */}
             <svg className="absolute w-full h-4 -bottom-1 left-0 text-brand-lime opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
               <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
@@ -74,15 +74,15 @@ const Hero: React.FC = () => {
         </h1>
 
         <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed font-medium animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-          4 yillik deneyime sahip Full-Stack gelistirici olarak
-          <strong> ASP.NET Core</strong>, <strong>C#</strong> ve <strong>React</strong> ile olceklenebilir web uygulamalari gelistiriyorum.
-          Guvenli REST API, mikroservis mimarisi ve Clean Architecture odakli cozumler uretiyorum.
+          4 yıllık deneyime sahip Full-Stack geliştirici olarak
+          <strong> ASP.NET Core</strong>, <strong>C#</strong> ve <strong>React</strong> ile ölçeklenebilir web uygulamaları geliştiriyorum.
+          Güvenli REST API, mikroservis mimarisi ve Clean Architecture odaklı çözümler üretiyorum.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
           <a href="#proposal" onClick={handleScroll}>
             <Button variant="primary" size="lg" className="min-w-[180px] shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                Iletisime Gec
+                İletişime Gec
             </Button>
           </a>
           <a href="#portfolio" onClick={handleScroll}>
@@ -103,3 +103,4 @@ const Hero: React.FC = () => {
 };
 
 export default Hero;
+

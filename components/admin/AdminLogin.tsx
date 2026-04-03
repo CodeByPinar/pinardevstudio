@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import { Lock, ArrowLeft, ShieldCheck } from 'lucide-react';
@@ -83,7 +83,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onBack }) => {
                             label="Username" 
                             value={username} 
                             onChange={(e) => setUsername(e.target.value)} 
-                            placeholder="yonetici"
+                            placeholder="yönetici"
                             className="bg-white/50 border-gray-200 focus:bg-white focus:border-black transition-all"
                         />
                     </div>
@@ -136,7 +136,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onBack }) => {
             
             {/* Footer Copyright */}
             <div className="text-center mt-8 text-gray-400 text-xs font-medium">
-                &copy; {new Date().getFullYear()} Pinar Topuz. Tum haklari saklidir.
+                &copy; {new Date().getFullYear()} Pinar Topuz. Tüm haklari saklidir.
             </div>
         </div>
     </div>

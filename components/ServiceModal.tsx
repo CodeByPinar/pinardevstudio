@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect } from 'react';
 import { X, CheckCircle, ArrowRight, Zap, Layers, Code } from 'lucide-react';
 import Button from './ui/Button';
@@ -66,7 +66,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, onClose }) => {
               </div>
               <div className="flex-1 pt-2">
                  <h2 className="text-3xl md:text-4xl font-extrabold text-black mb-2">{service.title}</h2>
-                  <p className="text-gray-600 font-medium text-lg">Ihtiyaciniza ozel profesyonel cozumler.</p>
+                  <p className="text-gray-600 font-medium text-lg">Ihtiyaciniza ozel profesyonel çözümler.</p>
               </div>
            </div>
         </div>
@@ -115,7 +115,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, onClose }) => {
                       <Layers size={18} /> Neden Ben?
                     </h4>
                     <p className="text-sm text-gray-600">
-                      Gelecekteki buyumeyi desteklemek icin olceklenebilir mimari ve temiz kodla teknik borcu minimuma indiririm.
+                      Gelecekteki buyumeyi desteklemek icin ölçeklenebilir mimari ve temiz kodla teknik borcu minimuma indiririm.
                     </p>
                  </div>
               </div>
@@ -137,3 +137,4 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, onClose }) => {
 };
 
 export default ServiceModal;
+

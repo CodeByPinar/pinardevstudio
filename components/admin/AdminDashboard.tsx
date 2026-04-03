@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import {
   LayoutDashboard,
   FolderKanban,
@@ -104,7 +104,7 @@ const StatsChart = ({ data }: { data: { month: string, count: string }[] }) => {
       
       {/* Bars */}
       {data.length === 0 ? (
-          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">Henuz veri yok</div>
+          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">Henüz veri yok</div>
       ) : (
           data.map((d, i) => {
             const count = parseInt(d.count);
@@ -113,7 +113,7 @@ const StatsChart = ({ data }: { data: { month: string, count: string }[] }) => {
                 <div key={i} className="w-full flex flex-col items-center gap-2 group cursor-pointer h-full justify-end">
                     <div className="w-full bg-brand-lime hover:bg-black transition-colors rounded-t-sm relative" style={{ height: `${height}%` }}>
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-black text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                      {count} goruntulenme
+                      {count} görüntülenme
                     </div>
                     </div>
                     <span className="text-[10px] font-bold text-gray-400 uppercase">{d.month}</span>
@@ -381,8 +381,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
 
   const kanbanColumns: Array<{ key: 'new' | 'in_progress' | 'responded'; title: string; tone: string }> = [
     { key: 'new', title: 'Yeni', tone: 'bg-yellow-50 border-yellow-100' },
-    { key: 'in_progress', title: 'Yanitlaniyor', tone: 'bg-blue-50 border-blue-100' },
-    { key: 'responded', title: 'Yanitlandi', tone: 'bg-green-50 border-green-100' }
+    { key: 'in_progress', title: 'Yanıtlaniyor', tone: 'bg-blue-50 border-blue-100' },
+    { key: 'responded', title: 'Yanıtlandi', tone: 'bg-green-50 border-green-100' }
   ];
 
   const togglePlugin = (key: PluginKey) => {
@@ -430,7 +430,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
   // --------------------------------------------------------
   const handleDeletePost = async (id: number) => {
     if (!isAdmin) return;
-    if (window.confirm('Bu blog yazisini silmek istiyor musunuz?')) {
+    if (window.confirm('Bu blog yazısini silmek istiyor musunuz?')) {
       try {
         const response = await fetch(`/api/posts/${id}`, {
           method: 'DELETE',
@@ -567,7 +567,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
            {[
              { id: 'overview', icon: LayoutDashboard, label: 'Genel Bakis' },
              { id: 'projects', icon: FolderKanban, label: 'Projeler' },
-             { id: 'blog', icon: Newspaper, label: 'Blog Yazilari' },
+             { id: 'blog', icon: Newspaper, label: 'Blog Yazıları' },
              { id: 'messages', icon: MessageSquare, label: 'Gelen Kutusu', badge: liveMessages.length }
            ].map((item) => (
              <button 
@@ -618,8 +618,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             {activeTab === 'overview' && (
                 <div className="space-y-10 animate-fade-in-up">
                     <header>
-                       <h1 className="text-4xl font-extrabold text-black mb-2">Panel Ozeti</h1>
-                       <p className="text-gray-500 font-medium">Tekrar hos geldiniz, kontrol sende. Performans ve icerik durumu burada.</p>
+                       <h1 className="text-4xl font-extrabold text-black mb-2">Panel Özeti</h1>
+                       <p className="text-gray-500 font-medium">Tekrar hos geldiniz, kontrol sende. Performans ve içerik durumu burada.</p>
                     </header>
 
                 {/* Plugin Switchboard */}
@@ -679,14 +679,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                 <span className="flex items-center gap-1 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">+5%</span>
                             </div>
                             <h3 className="text-5xl font-black text-black mb-1">{posts.length}</h3>
-                            <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Yayinlanan Yazi</p>
+                            <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Yayinlanan Yazı</p>
                         </div>
                         <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 group hover:-translate-y-1 transition-transform">
                              <div className="flex justify-between items-start mb-8">
                                 <div className="p-4 bg-gray-50 rounded-2xl group-hover:bg-brand-lime transition-colors"><MessageSquare size={24}/></div>
                             </div>
                           <h3 className="text-5xl font-black text-black mb-1">{unreadCount}</h3>
-                          <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Okunmamis Mesaj</p>
+                          <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Okunmamış Mesaj</p>
                         </div>
                          <div className="bg-black text-white p-6 rounded-[2rem] shadow-xl flex flex-col justify-center relative overflow-hidden">
                              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-lime opacity-20 rounded-full blur-3xl"></div>
@@ -696,7 +696,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                     <span className="text-xs font-bold uppercase tracking-widest">Sistem Durumu</span>
                                 </div>
                                   <h3 className="text-2xl font-bold mb-1">Aktif</h3>
-                                  <p className="text-gray-400 text-sm">Tum sistemler sorunsuz calisiyor.</p>
+                                  <p className="text-gray-400 text-sm">Tüm sistemler sorunsuz calisiyor.</p>
                              </div>
                         </div>
                     </div>
@@ -706,7 +706,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                         <div className="flex items-center justify-between mb-8">
                             <div>
                                <h3 className="text-xl font-bold text-black flex items-center gap-2">
-                                 <BarChart3 className="text-brand-lime" /> Profil Goruntulenmeleri
+                                 <BarChart3 className="text-brand-lime" /> Profil Görüntülenmeleri
                                </h3>
                                <p className="text-sm text-gray-400 mt-1">Gercek zamanli ziyaretci trafigi (Toplam: {stats.total})</p>
                             </div>
@@ -731,7 +731,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                           <p className="text-sm text-gray-500 mt-2">Toplam makale görüntülenmesi</p>
                         </div>
                         <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                          <p className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-3">Ortalama Goruntuleme</p>
+                          <p className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-3">Ortalama Görüntüleme</p>
                           <h4 className="text-3xl font-black">{avgPostViews}</h4>
                           <p className="text-sm text-gray-500 mt-2">Makale başına ortalama görüntülenme</p>
                         </div>
@@ -748,12 +748,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                           <div>
                             <h3 className="text-xl font-bold text-black flex items-center gap-2"><Sparkles size={20} className="text-brand-lime" /> Hizli Aksiyon Merkezi</h3>
-                            <p className="text-sm text-gray-500 mt-1">Tek tikla icerik uret, disa aktarim al, gelen kutusunu temizle.</p>
+                            <p className="text-sm text-gray-500 mt-1">Tek tikla içerik uret, disa aktarim al, gelen kutusunu temizle.</p>
                           </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                           <Button onClick={openAddProject} className="gap-2 justify-center" size="sm"><Plus size={16} /> Proje Ekle</Button>
-                          <Button onClick={openAddPost} className="gap-2 justify-center" size="sm"><Plus size={16} /> Yazi Ekle</Button>
+                          <Button onClick={openAddPost} className="gap-2 justify-center" size="sm"><Plus size={16} /> Yazı Ekle</Button>
                           <button
                             onClick={() => downloadCsv('projects.csv', projects.map((p) => ({ id: p.id, title: p.title, category: p.category, year: p.year, type: p.type, tags: p.tags.join('|') })))}
                             className="h-10 rounded-xl border border-gray-200 font-bold text-sm hover:border-black transition-colors flex items-center justify-center gap-2"
@@ -819,13 +819,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             {activeTab === 'projects' && (
                 <div className="space-y-8 animate-fade-in-up">
                      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <h1 className="text-3xl font-extrabold text-black">Proje Yonetimi</h1>
+                        <h1 className="text-3xl font-extrabold text-black">Proje Yönetimi</h1>
                         <div className="flex items-center gap-3 w-full md:w-auto">
                         <div className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl bg-white">
                           <SlidersHorizontal size={16} className="text-gray-400" />
                           <select value={projectSort} onChange={(e) => setProjectSort(e.target.value as 'latest' | 'title' | 'type')} className="text-sm font-semibold bg-transparent outline-none">
                                 <option value="latest">En Yeni</option>
-                                <option value="title">Baslik A-Z</option>
+                                <option value="title">Başlık A-Z</option>
                                 <option value="type">Tur</option>
                           </select>
                         </div>
@@ -882,13 +882,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             {activeTab === 'blog' && (
                 <div className="space-y-8 animate-fade-in-up">
                      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <h1 className="text-3xl font-extrabold text-black">Blog Yazilari</h1>
+                        <h1 className="text-3xl font-extrabold text-black">Blog Yazıları</h1>
                         <div className="flex items-center gap-3 w-full md:w-auto">
                         <div className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl bg-white">
                           <SlidersHorizontal size={16} className="text-gray-400" />
                           <select value={postSort} onChange={(e) => setPostSort(e.target.value as 'latest' | 'title' | 'views')} className="text-sm font-semibold bg-transparent outline-none">
                                 <option value="latest">En Yeni</option>
-                                <option value="title">Baslik A-Z</option>
+                                <option value="title">Başlık A-Z</option>
                                 <option value="views">En Cok Goruntulenen</option>
                           </select>
                         </div>
@@ -896,14 +896,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                               <input 
                                 type="text" 
-                                placeholder="Yazi ara..." 
+                                placeholder="Yazı ara..." 
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:border-black outline-none transition-all"
                               />
                            </div>
                            {isAdmin && (
-                               <Button onClick={openAddPost} size="sm" className="gap-2 shadow-lg whitespace-nowrap"><Plus size={18}/> Yazi Ekle</Button>
+                               <Button onClick={openAddPost} size="sm" className="gap-2 shadow-lg whitespace-nowrap"><Plus size={18}/> Yazı Ekle</Button>
                            )}
                            <button
                              onClick={() => downloadCsv('posts.csv', filteredPosts.map((p) => ({ id: p.id, title: p.title, date: p.date, views: p.views || 0, tags: p.tags.join('|') })))}
@@ -915,7 +915,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                      </div>
 
                      <div className="grid grid-cols-1 gap-4">
-                        {filteredPosts.length === 0 && <p className="text-center text-gray-400 py-10">Yazi bulunamadi.</p>}
+                        {filteredPosts.length === 0 && <p className="text-center text-gray-400 py-10">Yazı bulunamadi.</p>}
                         {filteredPosts.map(post => (
                             <div key={post.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-6 hover:shadow-md transition-shadow">
                                 <div className="w-full md:w-24 h-48 md:h-24 relative rounded-xl overflow-hidden flex-shrink-0">
@@ -954,15 +954,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                             <div className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl bg-white">
                                <CircleDashed size={16} className="text-gray-400" />
                                <select value={messageFilter} onChange={(e) => setMessageFilter(e.target.value as 'all' | 'unread' | 'read')} className="text-sm font-semibold bg-transparent outline-none">
-                                 <option value="all">Tum</option>
-                                 <option value="unread">Okunmamis</option>
-                                 <option value="read">Okunmus</option>
+                                 <option value="all">Tüm</option>
+                                 <option value="unread">Okunmamış</option>
+                                 <option value="read">Okunmuş</option>
                                </select>
                             </div>
                             <div className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl bg-white">
                                <Layers3 size={16} className="text-gray-400" />
                                <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)} className="text-sm font-semibold bg-transparent outline-none">
-                                 <option value="all">Tum Hizmetler</option>
+                                 <option value="all">Tüm Hizmetler</option>
                                  {serviceOptions.map((service) => (
                                    <option key={service} value={service}>{service}</option>
                                  ))}
@@ -978,7 +978,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                               onClick={markAllAsRead}
                               className="h-10 px-4 rounded-xl border border-gray-200 font-bold text-sm hover:border-black transition-colors flex items-center gap-2"
                             >
-                              <CheckCircle2 size={16} /> Tumunu Okundu Yap
+                              <CheckCircle2 size={16} /> Tümunu Okundu Yap
                             </button>
                             <div className="relative w-64">
                               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -1045,9 +1045,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                                 <div className="flex items-center gap-2">
                                                   <h3 className="text-xl font-bold text-black">{msg.name}</h3>
                                                   {readMessageIds.includes(msg.id) ? (
-                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-50 text-green-600 font-bold uppercase tracking-wider flex items-center gap-1"><CheckCircle2 size={12} /> okunmus</span>
+                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-50 text-green-600 font-bold uppercase tracking-wider flex items-center gap-1"><CheckCircle2 size={12} /> okunmuş</span>
                                                   ) : (
-                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-700 font-bold uppercase tracking-wider flex items-center gap-1"><BellRing size={12} /> okunmamis</span>
+                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-700 font-bold uppercase tracking-wider flex items-center gap-1"><BellRing size={12} /> okunmamış</span>
                                                   )}
                                                 </div>
                                                 <p className="text-gray-500 text-sm">{msg.email}</p>
@@ -1060,7 +1060,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                     </div>
                                     <div className="pl-0 md:pl-16">
                                          <div className="mb-4">
-                                             <span className="text-xs font-bold uppercase text-gray-400 tracking-wider">Butce</span>
+                                             <span className="text-xs font-bold uppercase text-gray-400 tracking-wider">Bütçe</span>
                                              <p className="font-semibold text-black">{msg.budget}</p>
                                          </div>
                                          <div>
@@ -1104,7 +1104,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             <div className="bg-white rounded-[2.5rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 p-8 md:p-10 animate-fade-in-up shadow-2xl">
                 <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-6">
                     <h2 className="text-3xl font-extrabold text-black">
-                        {formData.id ? 'Duzenle' : 'Yeni Olustur'} {editingType === 'project' ? 'Proje' : 'Yazi'}
+                        {formData.id ? 'Duzenle' : 'Yeni Olustur'} {editingType === 'project' ? 'Proje' : 'Yazı'}
                     </h2>
                     <button onClick={() => setIsEditing(false)} className="p-2 bg-gray-100 rounded-full hover:bg-black hover:text-white transition-colors"><X size={20}/></button>
                 </div>
@@ -1114,7 +1114,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                     {/* Common Fields */}
                     <div className="space-y-2">
                          <Input 
-                           label="Baslik" 
+                           label="Başlık" 
                             value={formData.title || ''} 
                             onChange={e => setFormData({...formData, title: e.target.value})} 
                             required 
@@ -1167,7 +1167,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                               <Input label="Tur (Backend/Frontend/Veri)" value={formData.type || ''} onChange={e => setFormData({...formData, type: e.target.value})} />
                             </div>
                             <div className="grid grid-cols-2 gap-6">
-                              <Input label="Musteri" value={formData.client || ''} onChange={e => setFormData({...formData, client: e.target.value})} />
+                              <Input label="Müşteri" value={formData.client || ''} onChange={e => setFormData({...formData, client: e.target.value})} />
                                 <Input label="Rol" value={formData.role || ''} onChange={e => setFormData({...formData, role: e.target.value})} />
                             </div>
                             <div>
@@ -1185,11 +1185,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                     {editingType === 'post' && (
                         <>
                              <div className="grid grid-cols-2 gap-6">
-                                <Input label="Okuma Suresi" value={formData.readTime || ''} onChange={e => setFormData({...formData, readTime: e.target.value})} placeholder="5 dk" />
+                                <Input label="Okuma Süresi" value={formData.readTime || ''} onChange={e => setFormData({...formData, readTime: e.target.value})} placeholder="5 dk" />
                                 <Input label="Tarih" value={formData.date || ''} onChange={e => setFormData({...formData, date: e.target.value})} />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Ozet (Kisa)</label>
+                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Özet (Kisa)</label>
                                 <textarea 
                                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-black outline-none h-24 resize-none transition-all"
                                     value={formData.excerpt || ''}
@@ -1197,8 +1197,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                 ></textarea>
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Tam Icerik (Markdown)</label>
-                                <div className="text-xs text-gray-400 mb-2 font-mono bg-gray-50 p-2 rounded">Baslik icin ##, liste icin - kullanin</div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Tam İçerik (Markdown)</label>
+                                <div className="text-xs text-gray-400 mb-2 font-mono bg-gray-50 p-2 rounded">Başlık icin ##, liste icin - kullanin</div>
                                 <textarea 
                                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-black outline-none h-64 font-mono text-sm transition-all"
                                     value={formData.content || ''}

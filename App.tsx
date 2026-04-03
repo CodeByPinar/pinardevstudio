@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -24,14 +24,14 @@ const defaultProjects: ProjectData[] = [
   {
     id: 1,
     title: "E-Ticaret API",
-    category: "Backend Gelistirme",
+    category: "Backend Geliştirme",
     year: "2023",
     image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=2070&auto=format&fit=crop",
     type: "Backend",
     tags: ["ASP.NET Core", "C#", "SQL", "REST API"],
     client: "Perakende Sirketi",
     role: "Backend Lideri",
-    description: "Buyuk olcekli bir e-ticaret platformu icin olceklenebilir bir RESTful API tasarlayip gelistirdim. Sistem gunluk binlerce islemi yonetiyor; JWT kimlik dogrulama, gelismis urun filtreleme ve siparis yonetimi mikroservisleri iceriyor."
+    description: "Buyuk olcekli bir e-ticaret platformu icin ölçeklenebilir bir RESTful API tasarlayip gelistirdim. Sistem gunluk binlerce islemi yonetiyor; JWT kimlik dogrulama, gelismis urun filtreleme ve siparis yönetimi mikroservisleri iceriyor."
   },
   {
     id: 2,
@@ -41,8 +41,8 @@ const defaultProjects: ProjectData[] = [
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop",
     type: "Data",
     tags: ["Python", "React", "Pandas", "Scikit-learn"],
-    client: "Finans Teknoloji Cozumleri",
-    role: "Full-Stack Gelistirici",
+    client: "Finans Teknoloji Çözümleri",
+    role: "Full-Stack Geliştirici",
     description: "Gercek zamanli pazar trendlerini gorsellestiren uctan uca bir veri analitik paneli gelistirdim. Python ile anomali tahmin modelleri kurup, paydaslara aksiyon alinabilir icgoruler sunan React arayuzunu olusturdum."
   },
   {
@@ -54,7 +54,7 @@ const defaultProjects: ProjectData[] = [
     type: "Backend",
     tags: ["Java", "Spring Boot", "Docker", "Microservices"],
     client: "BankTech",
-    role: "Yazilim Muhendisi",
+    role: "Yazılim Muhendisi",
     description: "Eski bir bankacilik sisteminin modernizasyonuna katkida bulunarak monolitik modulleri Java Spring Boot ile mikroservis mimarisine tasidim. Sistem guvenilirligini artirdik ve dagitim surelerini %40 azalttik."
   },
   {
@@ -66,8 +66,8 @@ const defaultProjects: ProjectData[] = [
     type: "Frontend",
     tags: ["Angular", "TypeScript", "RxJS"],
     client: "Kurumsal Sirket",
-    role: "Frontend Gelistirici",
-    description: "Calisan yonetimi ve kaynak planlamasi icin kapsamli bir ic portal gelistirdim. Angular ile dinamik ve tekrar kullanilabilir bilesenler olusturarak cihazlar arasi kesintisiz bir deneyim sagladim."
+    role: "Frontend Geliştirici",
+    description: "Calisan yönetimi ve kaynak planlamasi icin kapsamli bir ic portal gelistirdim. Angular ile dinamik ve tekrar kullanilabilir bilesenler olusturarak cihazlar arasi kesintisiz bir deneyim sagladim."
   }
 ];
 
@@ -76,8 +76,8 @@ const defaultPosts: BlogPost[] = [
   {
     id: 1,
     title: ".NET'te Clean Architecture Neden Onemli?",
-    excerpt: "Sorumluluklarin ayrismasinin ASP.NET Core ile nasil daha bakimi kolay, test edilebilir ve olceklenebilir kurumsal uygulamalar sagladigini inceliyoruz.",
-    content: "Clean Architecture yazilimi katmanlara ayirir ve her katmana net bir sorumluluk verir. \n\n## Spagetti Kod Sorunu\nBir cok eski projede is kurallari UI ya da veritabani mantigiyla siki sekilde baglidir. Bu da uygulamayi bozmadan birim test yazmayi veya veritabanini degistirmeyi zorlastirir.\n\n## Temiz Cozum\n.NET dunyasinda cozumumuzu genelde su sekilde kurgulariz: \n- **Domain:** Is kurallari ve varliklar \n- **Application:** Is akislari ve use-case katmani \n- **Infrastructure:** Dis bagimliliklar (Db, dosya sistemi vb.) \n- **Presentation:** API veya UI \n\nBu ayrim sayesinde is mantigini veritabani ya da UI'den bagimsiz test edebiliriz. Ayrica SQL Server'dan PostgreSQL'e gecis gibi teknoloji degisimleri cok daha kolay hale gelir.",
+    excerpt: "Sorumluluklarin ayrismasinin ASP.NET Core ile nasil daha bakimi kolay, test edilebilir ve ölçeklenebilir kurumsal uygulamalar sagladigini inceliyoruz.",
+    content: "Clean Architecture yazılimi katmanlara ayirir ve her katmana net bir sorumluluk verir. \n\n## Spagetti Kod Sorunu\nBir cok eski projede is kurallari UI ya da veritabani mantigiyla siki sekilde baglidir. Bu da uygulamayi bozmadan birim test yazmayi veya veritabanini degistirmeyi zorlastirir.\n\n## Temiz Çözüm\n.NET dunyasinda çözümumuzu genelde su sekilde kurgulariz: \n- **Domain:** Is kurallari ve varliklar \n- **Application:** Is akislari ve use-case katmani \n- **Infrastructure:** Dis bagimliliklar (Db, dosya sistemi vb.) \n- **Presentation:** API veya UI \n\nBu ayrim sayesinde is mantigini veritabani ya da UI'den bagimsiz test edebiliriz. Ayrica SQL Server'dan PostgreSQL'e gecis gibi teknoloji degisimleri cok daha kolay hale gelir.",
     date: "12 Eki 2024",
     readTime: "5 dk okuma",
     image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop",
@@ -85,7 +85,7 @@ const defaultPosts: BlogPost[] = [
     views: 1250,
     author: {
         name: "Pınar Topuz",
-        role: "Full-Stack Gelistirici",
+        role: "Full-Stack Geliştirici",
         avatar: "https://ui-avatars.com/api/?name=Pinar+Topuz&background=000&color=fff"
     }
   },
@@ -93,7 +93,7 @@ const defaultPosts: BlogPost[] = [
     id: 2,
     title: "React ile Yapay Zeka Modellerini Entegre Etmek",
     excerpt: "Python tabanli makine ogrenmesi modellerini REST API veya WebSocket ile React arayuze nasil baglayabileceginizi adim adim anlatiyoruz.",
-    content: "Makine ogrenmesinin yayginlasmasiyla birlikte frontend ekipleri artik AI uretimi veriyi sikca ekrana tasiyor. \n\n## Mimari Yaklasim\nYaygin yontem, Python modelinizi Flask ya da FastAPI tarafinda servis etmek ve React uygulamanizin bu servisi tuketmesidir. \n\n## Gecikme Yonetimi\nAI cikarimi zaman alabileceginden gecikme yonetimi kritik hale gelir. Bu durumda WebSocket veya Server-Sent Events (SSE), standart HTTP isteklerine gore daha iyi bir kullanici deneyimi sunar.\n\n- Asenkron destek icin **FastAPI** kullanin\n- Onbellekleme icin **React Query** ekleyin\n- Arayuzde iyimser guncellemeler uygulayin",
+    content: "Makine ogrenmesinin yayginlasmasiyla birlikte frontend ekipleri artik AI uretimi veriyi sikca ekrana tasiyor. \n\n## Mimari Yaklasim\nYaygin yontem, Python modelinizi Flask ya da FastAPI tarafinda servis etmek ve React uygulamanizin bu servisi tuketmesidir. \n\n## Gecikme Yönetimi\nAI cikarimi zaman alabileceginden gecikme yönetimi kritik hale gelir. Bu durumda WebSocket veya Server-Sent Events (SSE), standart HTTP isteklerine gore daha iyi bir kullanici deneyimi sunar.\n\n- Asenkron destek icin **FastAPI** kullanin\n- Onbellekleme icin **React Query** ekleyin\n- Arayuzde iyimser güncellemeler uygulayin",
     date: "05 Kas 2024",
     readTime: "7 dk okuma",
     image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1965&auto=format&fit=crop",
@@ -101,7 +101,7 @@ const defaultPosts: BlogPost[] = [
     views: 980,
     author: {
         name: "Pınar Topuz",
-        role: "Full-Stack Gelistirici",
+        role: "Full-Stack Geliştirici",
         avatar: "https://ui-avatars.com/api/?name=Pinar+Topuz&background=000&color=fff"
     }
   },
@@ -117,7 +117,7 @@ const defaultPosts: BlogPost[] = [
     views: 3400,
     author: {
         name: "Pınar Topuz",
-        role: "Full-Stack Gelistirici",
+        role: "Full-Stack Geliştirici",
         avatar: "https://ui-avatars.com/api/?name=Pinar+Topuz&background=000&color=fff"
     }
   }
@@ -301,3 +301,4 @@ function App() {
 }
 
 export default App;
+

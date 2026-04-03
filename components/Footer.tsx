@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import { ArrowUpRight, Send, MapPin, Phone, Mail, Lock } from 'lucide-react';
 import Button from './ui/Button';
@@ -32,7 +32,7 @@ const Footer: React.FC<FooterProps> = ({ onAdminClick }) => {
           {/* Contact Details */}
           <div className="flex flex-col justify-end">
             <div className="bg-white/40 backdrop-blur-md p-8 md:p-12 rounded-[2rem] border border-white/50 space-y-8">
-              <h3 className="text-2xl font-bold text-black">Iletisim Bilgileri</h3>
+              <h3 className="text-2xl font-bold text-black">İletişim Bilgileri</h3>
               
               {/* Phone Number Hidden
               <div className="flex items-center gap-4">
@@ -52,7 +52,7 @@ const Footer: React.FC<FooterProps> = ({ onAdminClick }) => {
                   </div>
                   <div>
                       <p className="text-xs font-bold uppercase text-black/50">Konum</p>
-                      <p className="text-lg font-semibold">Samsun, Turkiye</p>
+                      <p className="text-lg font-semibold">Samsun, Türkiye</p>
                   </div>
               </div>
 
@@ -73,7 +73,7 @@ const Footer: React.FC<FooterProps> = ({ onAdminClick }) => {
         <div className="flex flex-col md:flex-row justify-between items-end border-t border-black/10 pt-10 gap-8">
           <div className="text-center md:text-left">
              <h3 className="font-bold text-2xl mb-2 text-black">Pınar Topuz</h3>
-             <p className="text-sm font-medium text-black/60">© 2025 Pinar Tech Studio.<br/>Tum haklari saklidir.</p>
+             <p className="text-sm font-medium text-black/60">© 2025 Pinar Tech Studio.<br/>Tüm haklari saklidir.</p>
           </div>
           
           <div className="flex gap-8 flex-wrap justify-center items-center">
@@ -84,7 +84,7 @@ const Footer: React.FC<FooterProps> = ({ onAdminClick }) => {
             
             {/* Secret Admin Link */}
             {onAdminClick && (
-              <button onClick={onAdminClick} className="opacity-20 hover:opacity-100 transition-opacity ml-4" title="Yonetici Girisi">
+              <button onClick={onAdminClick} className="opacity-20 hover:opacity-100 transition-opacity ml-4" title="Yönetici Girisi">
                 <Lock size={16} />
               </button>
             )}
@@ -101,3 +101,4 @@ const Footer: React.FC<FooterProps> = ({ onAdminClick }) => {
 };
 
 export default Footer;
+

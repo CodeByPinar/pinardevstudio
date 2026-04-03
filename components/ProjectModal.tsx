@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { X, ExternalLink, Calendar, User, Layers } from 'lucide-react';
 import Button from './ui/Button';
 import { ProjectData } from '../types';
@@ -66,7 +66,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                 <div className="flex items-start gap-3">
                     <div className="p-2 bg-gray-100 rounded-full"><User size={20} /></div>
                     <div>
-                        <p className="text-xs font-bold uppercase text-gray-400 tracking-wider">Musteri</p>
+                        <p className="text-xs font-bold uppercase text-gray-400 tracking-wider">Müşteri</p>
                         <p className="font-semibold text-black">{project.client || 'Gizli'}</p>
                     </div>
                 </div>
@@ -81,7 +81,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                     <div className="p-2 bg-gray-100 rounded-full"><Layers size={20} /></div>
                     <div>
                         <p className="text-xs font-bold uppercase text-gray-400 tracking-wider">Rol</p>
-                        <p className="font-semibold text-black">{project.role || 'Tasarim ve Gelistirme'}</p>
+                        <p className="font-semibold text-black">{project.role || 'Tasarim ve Geliştirme'}</p>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                           {project.description || "Bu proje, dijital donusume butuncul bir yaklasimla ele alindi. Cihazlar arasi tutarli calisan kullanici odakli bir deneyim olusturuldu. Surec, detayli kullanici arastirmasi, wireframe ve yuksek sadakatli prototipleme adimlariyla ilerletildi."}
                         </p>
                         <p className="text-gray-600 leading-relaxed text-lg mt-4">
-                          Modern web teknolojileriyle olceklenebilir ve surdurulebilir bir kod tabani kuruldu; performans ve SEO birlikte optimize edildi. Sonuc olarak marka vizyonuyla uyumlu, akici bir dijital deneyim sunuldu.
+                          Modern web teknolojileriyle ölçeklenebilir ve surdurulebilir bir kod tabani kuruldu; performans ve SEO birlikte optimize edildi. Sonuc olarak marka vizyonuyla uyumlu, akici bir dijital deneyim sunuldu.
                         </p>
                     </div>
 
@@ -133,7 +133,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                     <div className="bg-brand-lime/10 p-6 rounded-2xl border border-brand-lime/20">
                          <h4 className="font-bold text-lg mb-2">Sonuc</h4>
                          <p className="text-sm text-gray-600">
-                           Ilk ay icinde kullanici etkilesimini %40'tan fazla artiran ve hemen cikma oranini ciddi sekilde dusuren yuksek performansli bir cozum teslim edildi.
+                           Ilk ay icinde kullanici etkilesimini %40'tan fazla artiran ve hemen cikma oranini ciddi sekilde dusuren yuksek performansli bir çözüm teslim edildi.
                          </p>
                     </div>
 
