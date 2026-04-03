@@ -7,7 +7,13 @@
     "dev": "vite",
     "build": "npx vite build",
     "start": "node server/index.js",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server:pm2:start": "npx pm2 start ecosystem.config.cjs --env production",
+    "server:pm2:restart": "npx pm2 restart all",
+    "server:pm2:stop": "npx pm2 stop all",
+    "server:pm2:logs": "npx pm2 logs",
+    "server:pm2:save": "npx pm2 save",
+    "server:pm2:status": "npx pm2 list"
   },
   "dependencies": {
     "@types/node": "^22.14.0",
@@ -33,6 +39,7 @@
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "pm2": "^6.0.14"
   }
 }

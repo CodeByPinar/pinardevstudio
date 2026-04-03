@@ -465,7 +465,7 @@ if (!process.env.VERCEL) {
   app.use(express.static(distPath));
 
   // Tüm diğer istekleri index.html'e yönlendir (SPA için)
-  app.get('/*', (req, res) => {
+  app.get('/{*splat}', (req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });
 }

@@ -157,6 +157,25 @@ npm start
 npm run build
 ```
 
+### 6. Backend Sunucuyu Sürekli Açık Tutma (PM2)
+```bash
+npm run server:pm2:start
+npm run server:pm2:save
+```
+
+Yönetim komutları:
+```bash
+npm run server:pm2:restart
+npm run server:pm2:stop
+npm run server:pm2:logs
+npm run server:pm2:status
+```
+
+Not:
+- PM2 içinde `pinar-watchdog` adında ikinci bir süreç çalışır.
+- Bu süreç her 5 dakikada bir `/api/projects` health-check yapar.
+- Arka arkaya başarısızlıkta backend sürecini otomatik yeniden başlatır.
+
 ---
 
 ## 🔌 API Dokümantasyonu

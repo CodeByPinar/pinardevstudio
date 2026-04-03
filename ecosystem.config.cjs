@@ -1,0 +1,50 @@
+module.exports = {
+  apps: [
+    {
+      name: 'pinar-backend',
+      script: 'server/index.js',
+      cwd: '.',
+      instances: 1,
+      exec_mode: 'fork',
+      autorestart: true,
+      max_restarts: 20,
+      restart_delay: 3000,
+      watch: false,
+      env: {
+        NODE_ENV: 'production',
+        PORT: 5000,
+      },
+      env_production: {
+        NODE_ENV: 'production',
+        PORT: 5000,
+      },
+    },
+    {
+      name: 'pinar-watchdog',
+      script: 'scripts/watchdog.mjs',
+      cwd: '.',
+      instances: 1,
+      exec_mode: 'fork',
+      autorestart: true,
+      max_restarts: 20,
+      restart_delay: 3000,
+      watch: false,
+      env: {
+        NODE_ENV: 'production',
+        HEALTHCHECK_URL: 'http://127.0.0.1:5000/api/projects',
+        HEALTHCHECK_INTERVAL_MS: 300000,
+        HEALTHCHECK_TIMEOUT_MS: 8000,
+        HEALTHCHECK_FAIL_THRESHOLD: 2,
+        PM2_TARGET_APP: 'pinar-backend',
+      },
+      env_production: {
+        NODE_ENV: 'production',
+        HEALTHCHECK_URL: 'http://127.0.0.1:5000/api/projects',
+        HEALTHCHECK_INTERVAL_MS: 300000,
+        HEALTHCHECK_TIMEOUT_MS: 8000,
+        HEALTHCHECK_FAIL_THRESHOLD: 2,
+        PM2_TARGET_APP: 'pinar-backend',
+      },
+    },
+  ],
+};
