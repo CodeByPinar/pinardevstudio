@@ -7,14 +7,14 @@ const Testimonials: React.FC = () => {
     {
       id: 1,
       name: "Ahmet Yılmaz",
-      role: "CTO, FinTech Corp",
+      role: "Teknoloji Direktoru, FinTech Sirketi",
       text: "Pınar ile çalışmak projemizin kaderini değiştirdi. .NET Core mimarisindeki derin bilgisi sayesinde sistem performansımız %40 arttı.",
       img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop"
     },
     {
       id: 2,
       name: "Sarah Miller",
-      role: "Product Owner, Global AI",
+      role: "Urun Sahibi, Global AI",
       text: "Veri analitiği ve dashboard projemizde Pınar'ın Python ve React yetenekleri harikaydı. Karmaşık verileri anlaşılır içgörülere dönüştürdü.",
       img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop"
     },

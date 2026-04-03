@@ -4,23 +4,23 @@ const Process: React.FC = () => {
   const steps = [
     {
       number: "01",
-      title: "Discovery",
-      description: "We start by understanding your goals, audience, and the problem we need to solve together."
+      title: "Kesif",
+      description: "Hedeflerinizi, hedef kitlenizi ve birlikte cozecegimiz problemi netlestirerek baslariz."
     },
     {
       number: "02",
-      title: "Strategy",
-      description: "Defining the roadmap and technical approach to ensure the project is scalable and effective."
+      title: "Strateji",
+      description: "Projenin olceklenebilir ve etkili olmasi icin yol haritasi ve teknik yaklasimi belirleriz."
     },
     {
       number: "03",
-      title: "Design",
-      description: "Crafting visual aesthetics and interactive prototypes that align with your brand identity."
+      title: "Tasarim",
+      description: "Marka kimliginize uygun gorsel dil ve etkilesimli prototipler olustururuz."
     },
     {
       number: "04",
-      title: "Development",
-      description: "Bringing the design to life with clean, performant code using modern web technologies."
+      title: "Gelistirme",
+      description: "Modern web teknolojileriyle temiz ve performansli kod yazarak tasarimi hayata geciririz."
     }
   ];
 
@@ -31,8 +31,8 @@ const Process: React.FC = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">
-          <span className="text-brand-lime font-bold tracking-wider uppercase text-sm mb-2 block">How I Work</span>
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Simple Process.<br />Powerful Results.</h2>
+          <span className="text-brand-lime font-bold tracking-wider uppercase text-sm mb-2 block">Calisma Seklim</span>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Basit Surec.<br />Guclu Sonuclar.</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

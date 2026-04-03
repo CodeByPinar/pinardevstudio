@@ -3,6 +3,7 @@ export type UserRole = 'admin' | 'viewer';
 export interface User {
   username: string;
   role: UserRole;
+  token?: string;
 }
 
 export interface ProjectData {

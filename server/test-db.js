@@ -1,12 +1,15 @@
 import pg from 'pg';
+import dotenv from 'dotenv';
 const { Client } = pg;
 
+dotenv.config();
+
 const client = new Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres', // Varsayılan veritabanına bağlanmayı deniyoruz
-  password: 'Piner842301.#',
-  port: 5432,
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_ADMIN_DATABASE || 'postgres', // Varsayılan veritabanı
+  password: process.env.DB_PASSWORD || undefined,
+  port: Number(process.env.DB_PORT || 5432),
 });
 
 async function test() {
@@ -16,13 +19,18 @@ async function test() {
     console.log('Bağlantı başarılı!');
     
     // Hedef veritabanı var mı kontrol et
-    const res = await client.query("SELECT 1 FROM pg_database WHERE datname = 'projelerim_db'");
+    const targetDb = process.env.DB_NAME || 'projelerim_db';
+    const res = await client.query('SELECT 1 FROM pg_database WHERE datname = $1', [targetDb]);
+    if (!/^[a-zA-Z0-9_]+$/.test(targetDb)) {
+      throw new Error('DB_NAME sadece harf, rakam ve alt çizgi içerebilir.');
+    }
+
     if (res.rows.length === 0) {
-        console.log("'projelerim_db' bulunamadı, oluşturuluyor...");
-        await client.query('CREATE DATABASE projelerim_db');
-        console.log("'projelerim_db' başarıyla oluşturuldu.");
+      console.log(`'${targetDb}' bulunamadı, oluşturuluyor...`);
+      await client.query(`CREATE DATABASE ${targetDb}`);
+      console.log(`'${targetDb}' başarıyla oluşturuldu.`);
     } else {
-        console.log("'projelerim_db' zaten mevcut.");
+      console.log(`'${targetDb}' zaten mevcut.`);
     }
 
     await client.end();

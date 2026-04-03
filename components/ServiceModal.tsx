@@ -66,7 +66,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, onClose }) => {
               </div>
               <div className="flex-1 pt-2">
                  <h2 className="text-3xl md:text-4xl font-extrabold text-black mb-2">{service.title}</h2>
-                 <p className="text-gray-600 font-medium text-lg">Professional Solutions tailored to your needs.</p>
+                  <p className="text-gray-600 font-medium text-lg">Ihtiyaciniza ozel profesyonel cozumler.</p>
               </div>
            </div>
         </div>
@@ -85,7 +85,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, onClose }) => {
               {/* Features List */}
               <div>
                  <h3 className="text-sm font-bold uppercase tracking-wider text-black mb-6 flex items-center gap-2">
-                   <Zap size={18} className="text-brand-lime fill-black" /> Key Features
+                   <Zap size={18} className="text-brand-lime fill-black" /> Temel Ozellikler
                  </h3>
                  <ul className="space-y-4">
                    {service.features?.map((feature, idx) => (
@@ -100,7 +100,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, onClose }) => {
               {/* Technologies */}
               <div>
                  <h3 className="text-sm font-bold uppercase tracking-wider text-black mb-6 flex items-center gap-2">
-                   <Code size={18} className="text-blue-500" /> Technologies
+                   <Code size={18} className="text-blue-500" /> Teknolojiler
                  </h3>
                  <div className="flex flex-wrap gap-2">
                     {service.technologies?.map((tech, idx) => (
@@ -112,10 +112,10 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, onClose }) => {
 
                  <div className="mt-8 p-6 bg-brand-lime/10 rounded-2xl border border-brand-lime/20">
                     <h4 className="font-bold text-black mb-1 flex items-center gap-2">
-                        <Layers size={18} /> Why Choose Me?
+                      <Layers size={18} /> Neden Ben?
                     </h4>
                     <p className="text-sm text-gray-600">
-                        I ensure scalable architecture and clean code, minimizing technical debt for future growth.
+                      Gelecekteki buyumeyi desteklemek icin olceklenebilir mimari ve temiz kodla teknik borcu minimuma indiririm.
                     </p>
                  </div>
               </div>
@@ -124,7 +124,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, onClose }) => {
            {/* Footer Action */}
            <div className="mt-12 pt-8 border-t border-gray-100 flex justify-end">
               <Button onClick={handleGetStarted} className="group gap-2 shadow-xl">
-                 Get a Quote for this Service
+                  Bu Hizmet Icin Teklif Al
                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Button>
            </div>

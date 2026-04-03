@@ -9,14 +9,17 @@ interface ProjectsProps {
 }
 
 const Projects: React.FC<ProjectsProps> = ({ projects }) => {
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState("Tum");
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
-  const filteredProjects = filter === "All"
+  const filteredProjects = filter === "Tum"
     ? projects
-    : projects.filter(p => p.type === filter);
+    : projects.filter(p => {
+        if (filter === "Veri") return p.type === "Data" || p.type === "Veri";
+        return p.type === filter;
+      });
 
-  const filters = ["All", "Backend", "Frontend", "Data"];
+  const filters = ["Tum", "Backend", "Frontend", "Veri"];
 
   return (
     <section id="portfolio" className="py-32 bg-white relative">
@@ -26,7 +29,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-12">
           <div>
             <h2 className="text-6xl md:text-8xl font-bold text-black tracking-tighter mb-4 leading-[0.9]">
-              Selected<br/><span className="text-gray-200">Works</span>
+              Secili<br/><span className="text-gray-200">Calismalar</span>
             </h2>
           </div>
 
@@ -72,7 +75,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
                 {/* View Project Button (Centered) */}
                 <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <button className="bg-white text-black px-8 py-4 rounded-full font-bold flex items-center gap-2 transform translate-y-8 group-hover:translate-y-0 transition-all duration-500 shadow-2xl hover:scale-105 hover:bg-brand-lime">
-                        View Project <ArrowUpRight size={20} />
+                        Projeyi Gor <ArrowUpRight size={20} />
                     </button>
                 </div>
               </div>
@@ -103,7 +106,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
         {/* Footer Link */}
         <div className="mt-32 text-center">
              <a href="https://github.com/CodeByPinar" target="_blank" rel="noreferrer" className="group relative inline-flex items-center gap-2 text-xl font-bold text-black overflow-hidden">
-               <span className="relative z-10 border-b-2 border-black pb-1 group-hover:text-brand-green group-hover:border-brand-green transition-colors">View All Projects on GitHub</span>
+               <span className="relative z-10 border-b-2 border-black pb-1 group-hover:text-brand-green group-hover:border-brand-green transition-colors">GitHub'da Tum Projeleri Gor</span>
                <ArrowUpRight className="relative z-10 w-5 h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
              </a>
         </div>

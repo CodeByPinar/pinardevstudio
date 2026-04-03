@@ -10,17 +10,17 @@ interface BlogProps {
 
 const Blog: React.FC<BlogProps> = ({ posts }) => {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [selectedTag, setSelectedTag] = useState<string>("All");
+  const [selectedTag, setSelectedTag] = useState<string>("Tum");
 
   // Extract unique tags
   const allTags = useMemo(() => {
     const tags = new Set<string>();
     posts.forEach(post => post.tags.forEach(tag => tags.add(tag)));
-    return ["All", ...Array.from(tags)];
+    return ["Tum", ...Array.from(tags)];
   }, [posts]);
 
   // Filter posts
-  const filteredPosts = selectedTag === "All" 
+  const filteredPosts = selectedTag === "Tum" 
     ? posts 
     : posts.filter(post => post.tags.includes(selectedTag));
 
@@ -34,12 +34,12 @@ const Blog: React.FC<BlogProps> = ({ posts }) => {
         {/* Header & Filter */}
         <div className="flex flex-col lg:flex-row justify-between items-end mb-20 gap-10">
           <div className="max-w-2xl">
-            <span className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2 block">Insights & Thoughts</span>
+            <span className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2 block">Icerikler ve Notlar</span>
             <h2 className="text-4xl md:text-6xl font-extrabold text-black mb-6 tracking-tight">
-              Latest Articles
+              Son Yazilar
             </h2>
             <p className="text-gray-500 text-lg leading-relaxed">
-              Technical deep dives into .NET Architecture, React patterns, and the future of AI in software development.
+              .NET mimarisi, React desenleri ve yazilimda yapay zekanin gelecegi uzerine teknik icerikler.
             </p>
           </div>
 
@@ -64,12 +64,12 @@ const Blog: React.FC<BlogProps> = ({ posts }) => {
         {/* Empty State */}
         {filteredPosts.length === 0 && (
             <div className="text-center py-20 bg-white rounded-[2rem] border border-gray-100">
-                <p className="text-gray-400 text-lg">No articles found for this category.</p>
+                <p className="text-gray-400 text-lg">Bu kategori icin yazi bulunamadi.</p>
                 <button 
-                    onClick={() => setSelectedTag("All")} 
+                  onClick={() => setSelectedTag("Tum")} 
                     className="mt-4 text-black font-bold underline decoration-brand-lime"
                 >
-                    View All Posts
+                  Tum Yazilari Gor
                 </button>
             </div>
         )}

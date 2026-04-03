@@ -1,5 +1,30 @@
 import React, { useState, useMemo } from 'react';
-import { LayoutDashboard, FolderKanban, MessageSquare, LogOut, Plus, Trash2, Edit2, X, Save, Newspaper, Search, Shield, ShieldAlert, BarChart3, TrendingUp } from 'lucide-react';
+import {
+  LayoutDashboard,
+  FolderKanban,
+  MessageSquare,
+  LogOut,
+  Plus,
+  Trash2,
+  Edit2,
+  X,
+  Save,
+  Newspaper,
+  Search,
+  BarChart3,
+  TrendingUp,
+  Download,
+  SlidersHorizontal,
+  Sparkles,
+  PlugZap,
+  BellRing,
+  CircleDashed,
+  CheckCircle2,
+  Layers3,
+  Clock3,
+  GripVertical,
+  RefreshCw
+} from 'lucide-react';
 import { ProjectData, BlogPost, User } from '../../types';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
@@ -12,7 +37,11 @@ interface Message {
   budget: string;
   message: string;
   date: string;
+  status?: 'new' | 'in_progress' | 'responded';
+  created_at?: string;
 }
+
+type WidgetId = 'insights' | 'shortcuts' | 'serviceHeatmap' | 'activityFeed';
 
 interface AdminDashboardProps {
   user: User;
@@ -23,6 +52,41 @@ interface AdminDashboardProps {
   onUpdatePosts: (posts: BlogPost[]) => void;
   onLogout: () => void;
 }
+
+type PluginKey = 'insights' | 'shortcuts' | 'serviceHeatmap' | 'activityFeed';
+type PluginState = Record<PluginKey, boolean>;
+
+const defaultPlugins: PluginState = {
+  insights: true,
+  shortcuts: true,
+  serviceHeatmap: true,
+  activityFeed: true
+};
+
+const downloadCsv = (filename: string, rows: Record<string, unknown>[]) => {
+  if (!rows.length) return;
+
+  const headers = Object.keys(rows[0]);
+  const escape = (value: unknown) => {
+    const text = String(value ?? '');
+    return `"${text.replace(/"/g, '""')}"`;
+  };
+
+  const lines = [
+    headers.join(','),
+    ...rows.map((row) => headers.map((h) => escape(row[h])).join(','))
+  ];
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
 
 // Simple Custom SVG Chart Component
 const StatsChart = ({ data }: { data: { month: string, count: string }[] }) => {
@@ -40,7 +104,7 @@ const StatsChart = ({ data }: { data: { month: string, count: string }[] }) => {
       
       {/* Bars */}
       {data.length === 0 ? (
-          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">No data yet</div>
+          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">Henuz veri yok</div>
       ) : (
           data.map((d, i) => {
             const count = parseInt(d.count);
@@ -49,7 +113,7 @@ const StatsChart = ({ data }: { data: { month: string, count: string }[] }) => {
                 <div key={i} className="w-full flex flex-col items-center gap-2 group cursor-pointer h-full justify-end">
                     <div className="w-full bg-brand-lime hover:bg-black transition-colors rounded-t-sm relative" style={{ height: `${height}%` }}>
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-black text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                        {count} Views
+                      {count} goruntulenme
                     </div>
                     </div>
                     <span className="text-[10px] font-bold text-gray-400 uppercase">{d.month}</span>
@@ -66,16 +130,87 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
   const [isEditing, setIsEditing] = useState(false);
   const [editingType, setEditingType] = useState<'project' | 'post'>('project');
   const [searchQuery, setSearchQuery] = useState('');
+  const [projectSort, setProjectSort] = useState<'latest' | 'title' | 'type'>('latest');
+  const [postSort, setPostSort] = useState<'latest' | 'title' | 'views'>('latest');
+  const [messageFilter, setMessageFilter] = useState<'all' | 'unread' | 'read'>('all');
+  const [serviceFilter, setServiceFilter] = useState<string>('all');
   const [formData, setFormData] = useState<any>({});
   const [stats, setStats] = useState<{ monthly: any[], total: number }>({ monthly: [], total: 0 });
+  const [plugins, setPlugins] = useState<PluginState>(() => {
+    try {
+      const raw = localStorage.getItem('dashboard_plugins');
+      if (!raw) return defaultPlugins;
+      return { ...defaultPlugins, ...(JSON.parse(raw) as Partial<PluginState>) };
+    } catch {
+      return defaultPlugins;
+    }
+  });
+  const [readMessageIds, setReadMessageIds] = useState<number[]>(() => {
+    try {
+      const raw = localStorage.getItem('read_message_ids');
+      return raw ? (JSON.parse(raw) as number[]) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [liveMessages, setLiveMessages] = useState<Message[]>(messages);
+  const [syncPulse, setSyncPulse] = useState(false);
+  const [notificationText, setNotificationText] = useState('');
+  const [widgetOrder, setWidgetOrder] = useState<WidgetId[]>(() => {
+    try {
+      const raw = localStorage.getItem('dashboard_widget_order');
+      const parsed = raw ? (JSON.parse(raw) as WidgetId[]) : [];
+      const defaults: WidgetId[] = ['insights', 'shortcuts', 'serviceHeatmap', 'activityFeed'];
+      const valid = parsed.filter((p) => defaults.includes(p));
+      const missing = defaults.filter((d) => !valid.includes(d));
+      return [...valid, ...missing];
+    } catch {
+      return ['insights', 'shortcuts', 'serviceHeatmap', 'activityFeed'];
+    }
+  });
+  const [draggedWidget, setDraggedWidget] = useState<WidgetId | null>(null);
+  const [draggedMessageId, setDraggedMessageId] = useState<number | null>(null);
 
   const isAdmin = user.role === 'admin';
+
+  React.useEffect(() => {
+    localStorage.setItem('dashboard_plugins', JSON.stringify(plugins));
+  }, [plugins]);
+
+  React.useEffect(() => {
+    localStorage.setItem('read_message_ids', JSON.stringify(readMessageIds));
+  }, [readMessageIds]);
+
+  React.useEffect(() => {
+    localStorage.setItem('dashboard_widget_order', JSON.stringify(widgetOrder));
+  }, [widgetOrder]);
+
+  React.useEffect(() => {
+    setLiveMessages(messages);
+  }, [messages]);
+
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('admin_token');
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
+  const handleAuthFailure = (response: Response) => {
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem('admin_token');
+      onLogout();
+      return true;
+    }
+    return false;
+  };
 
   // Fetch Stats
   React.useEffect(() => {
     const fetchStats = async () => {
         try {
-            const response = await fetch('/api/stats');
+            const response = await fetch('/api/stats', {
+              headers: getAuthHeaders()
+            });
+            if (handleAuthFailure(response)) return;
             if (response.ok) {
                 const data = await response.json();
                 setStats(data);
@@ -87,20 +222,172 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
     fetchStats();
   }, []);
 
+  React.useEffect(() => {
+    if (!isAdmin) return;
+
+    const poll = async () => {
+      try {
+        const response = await fetch('/api/messages', {
+          headers: getAuthHeaders()
+        });
+
+        if (handleAuthFailure(response)) return;
+        if (!response.ok) return;
+
+        const data: Message[] = await response.json();
+        const previousCount = liveMessages.length;
+        setLiveMessages(data);
+        setSyncPulse(true);
+
+        if (data.length > previousCount) {
+          setNotificationText(`${data.length - previousCount} yeni bildirim alindi`);
+          setTimeout(() => setNotificationText(''), 4000);
+        }
+
+        setTimeout(() => setSyncPulse(false), 500);
+      } catch {
+        // polling errors are intentionally silent
+      }
+    };
+
+    const interval = setInterval(poll, 12000);
+    return () => clearInterval(interval);
+  }, [isAdmin, liveMessages.length]);
+
   // --------------------------------------------------------
   // FILTERING
   // --------------------------------------------------------
   const filteredProjects = useMemo(() => {
-    return projects.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()) || p.category.toLowerCase().includes(searchQuery.toLowerCase()));
-  }, [projects, searchQuery]);
+    const filtered = projects.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()) || p.category.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    return [...filtered].sort((a, b) => {
+      if (projectSort === 'title') return a.title.localeCompare(b.title);
+      if (projectSort === 'type') return (a.type || '').localeCompare(b.type || '');
+      return b.id - a.id;
+    });
+  }, [projects, searchQuery, projectSort]);
 
   const filteredPosts = useMemo(() => {
-    return posts.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()));
-  }, [posts, searchQuery]);
+    const filtered = posts.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    return [...filtered].sort((a, b) => {
+      if (postSort === 'title') return a.title.localeCompare(b.title);
+      if (postSort === 'views') return (b.views || 0) - (a.views || 0);
+      return b.id - a.id;
+    });
+  }, [posts, searchQuery, postSort]);
 
   const filteredMessages = useMemo(() => {
-    return messages.filter(m => m.name.toLowerCase().includes(searchQuery.toLowerCase()) || m.email.toLowerCase().includes(searchQuery.toLowerCase()));
-  }, [messages, searchQuery]);
+    return liveMessages
+      .filter(m => m.name.toLowerCase().includes(searchQuery.toLowerCase()) || m.email.toLowerCase().includes(searchQuery.toLowerCase()))
+      .filter(m => serviceFilter === 'all' || m.service === serviceFilter)
+      .filter(m => {
+        if (messageFilter === 'all') return true;
+        const isRead = readMessageIds.includes(m.id);
+        return messageFilter === 'read' ? isRead : !isRead;
+      });
+  }, [liveMessages, searchQuery, messageFilter, serviceFilter, readMessageIds]);
+
+  const serviceBreakdown = useMemo(() => {
+    return liveMessages.reduce<Record<string, number>>((acc, item) => {
+      const key = item.service || 'Bilinmeyen';
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+  }, [liveMessages]);
+
+  const serviceOptions = useMemo(() => Object.keys(serviceBreakdown).sort(), [serviceBreakdown]);
+
+  const totalPostViews = useMemo(() => posts.reduce((sum, p) => sum + (p.views || 0), 0), [posts]);
+  const avgPostViews = posts.length ? Math.round(totalPostViews / posts.length) : 0;
+  const unreadCount = useMemo(() => liveMessages.filter((m) => !readMessageIds.includes(m.id)).length, [liveMessages, readMessageIds]);
+
+  const activityFeed = useMemo(() => {
+    const items: { id: string; label: string; time: string; type: 'project' | 'post' | 'message' }[] = [];
+
+    projects.slice(0, 4).forEach((p) => {
+      items.push({
+        id: `project-${p.id}`,
+        label: `Yeni/son proje: ${p.title}`,
+        time: `${p.year || 'N/A'} yılında güncel`,
+        type: 'project'
+      });
+    });
+
+    posts.slice(0, 4).forEach((p) => {
+      items.push({
+        id: `post-${p.id}`,
+        label: `Blog güncellendi: ${p.title}`,
+        time: p.date || 'Tarih yok',
+        type: 'post'
+      });
+    });
+
+    liveMessages.slice(0, 4).forEach((m) => {
+      items.push({
+        id: `msg-${m.id}`,
+        label: `Yeni teklif: ${m.name}`,
+        time: m.date || 'Tarih yok',
+        type: 'message'
+      });
+    });
+
+    return items.slice(0, 8);
+  }, [projects, posts, liveMessages]);
+
+  const markMessageAsRead = (id: number) => {
+    if (readMessageIds.includes(id)) return;
+    setReadMessageIds((prev) => [...prev, id]);
+  };
+
+  const markAllAsRead = () => {
+    const allIds = liveMessages.map((m) => m.id);
+    setReadMessageIds(allIds);
+  };
+
+  const updateMessageStatus = async (id: number, status: 'new' | 'in_progress' | 'responded') => {
+    try {
+      const response = await fetch(`/api/messages/${id}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders()
+        },
+        body: JSON.stringify({ status })
+      });
+
+      if (handleAuthFailure(response)) return;
+      if (!response.ok) return;
+
+      const updated: Message = await response.json();
+      setLiveMessages((prev) => prev.map((m) => (m.id === updated.id ? { ...m, ...updated } : m)));
+    } catch {
+      // ignore transient status update errors
+    }
+  };
+
+  const handleWidgetDrop = (target: WidgetId) => {
+    if (!draggedWidget || draggedWidget === target) return;
+    setWidgetOrder((prev) => {
+      const next = [...prev];
+      const from = next.indexOf(draggedWidget);
+      const to = next.indexOf(target);
+      next.splice(from, 1);
+      next.splice(to, 0, draggedWidget);
+      return next;
+    });
+    setDraggedWidget(null);
+  };
+
+  const kanbanColumns: Array<{ key: 'new' | 'in_progress' | 'responded'; title: string; tone: string }> = [
+    { key: 'new', title: 'Yeni', tone: 'bg-yellow-50 border-yellow-100' },
+    { key: 'in_progress', title: 'Yanitlaniyor', tone: 'bg-blue-50 border-blue-100' },
+    { key: 'responded', title: 'Yanitlandi', tone: 'bg-green-50 border-green-100' }
+  ];
+
+  const togglePlugin = (key: PluginKey) => {
+    setPlugins((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
 
   // --------------------------------------------------------
@@ -108,9 +395,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
   // --------------------------------------------------------
   const handleDeleteProject = async (id: number) => {
     if (!isAdmin) return;
-    if (window.confirm('Delete this project?')) {
+    if (window.confirm('Bu projeyi silmek istiyor musunuz?')) {
       try {
-        const response = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+        const response = await fetch(`/api/projects/${id}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders()
+        });
+        if (handleAuthFailure(response)) return;
         if (response.ok) {
             onUpdateProjects(projects.filter(p => p.id !== id));
         }
@@ -139,9 +430,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
   // --------------------------------------------------------
   const handleDeletePost = async (id: number) => {
     if (!isAdmin) return;
-    if (window.confirm('Delete this blog post?')) {
+    if (window.confirm('Bu blog yazisini silmek istiyor musunuz?')) {
       try {
-        const response = await fetch(`/api/posts/${id}`, { method: 'DELETE' });
+        const response = await fetch(`/api/posts/${id}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders()
+        });
+        if (handleAuthFailure(response)) return;
         if (response.ok) {
             onUpdatePosts(posts.filter(p => p.id !== id));
         }
@@ -185,8 +480,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
     
     // Append all form fields to FormData
     Object.keys(formData).forEach(key => {
-        if (key === 'tags' && Array.isArray(formData[key])) {
+           if (key === 'tags' && Array.isArray(formData[key])) {
             data.append(key, formData[key].join(', '));
+           } else if (key === 'readTime') {
+             data.append('read_time', formData[key]);
         } else if (key === 'author') {
              data.append('author_name', formData.author.name);
              data.append('author_role', formData.author.role);
@@ -214,8 +511,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
         
         const response = await fetch(url, {
             method: method,
+          headers: getAuthHeaders(),
             body: data // FormData automatically sets Content-Type to multipart/form-data
         });
+        if (handleAuthFailure(response)) return;
 
         if (response.ok) {
             const savedItem = await response.json();
@@ -235,32 +534,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             setIsEditing(false);
             setFormData({});
         } else {
-            alert('Save failed');
+            alert('Kaydetme basarisiz');
         }
     } catch (error) {
         console.error("Save error", error);
-        alert('Save error');
+          alert('Kaydetme hatasi');
     }
   };
-
-  // Fetch messages from backend on load
-  React.useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await fetch('/api/messages');
-        if (response.ok) {
-          const data = await response.json();
-          // Update parent state via a prop if needed, or handle locally. 
-          // Since messages are passed as props, we might need to refactor App.tsx to fetch there, 
-          // but for now let's assume we just want to display them here or refresh.
-          // Ideally, App.tsx should handle the fetching.
-        }
-      } catch (error) {
-        console.error("Failed to fetch messages", error);
-      }
-    };
-    fetchMessages();
-  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
@@ -285,10 +565,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
 
         <nav className="flex-1 space-y-2 px-4">
            {[
-             { id: 'overview', icon: LayoutDashboard, label: 'Overview' },
-             { id: 'projects', icon: FolderKanban, label: 'Projects' },
-             { id: 'blog', icon: Newspaper, label: 'Blog Posts' },
-             { id: 'messages', icon: MessageSquare, label: 'Inbox', badge: messages.length }
+             { id: 'overview', icon: LayoutDashboard, label: 'Genel Bakis' },
+             { id: 'projects', icon: FolderKanban, label: 'Projeler' },
+             { id: 'blog', icon: Newspaper, label: 'Blog Yazilari' },
+             { id: 'messages', icon: MessageSquare, label: 'Gelen Kutusu', badge: liveMessages.length }
            ].map((item) => (
              <button 
                key={item.id}
@@ -310,7 +590,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
 
         <div className="p-6 border-t border-gray-100">
            <button onClick={onLogout} className="flex items-center gap-3 w-full px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors font-bold text-sm">
-             <LogOut size={20} /> Logout
+             <LogOut size={20} /> Cikis Yap
            </button>
         </div>
       </aside>
@@ -320,7 +600,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
         
         {/* Mobile Header */}
         <div className="lg:hidden bg-white border-b border-gray-100 p-4 flex justify-between items-center sticky top-0 z-30 shadow-sm">
-             <span className="font-bold text-lg">Pınar.Dash</span>
+             <span className="font-bold text-lg">Pinar.Dash</span>
              <button onClick={onLogout}><LogOut size={20}/></button>
         </div>
 
@@ -328,7 +608,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
         {!isAdmin && (
           <div className="bg-yellow-50 border-b border-yellow-100 px-8 py-3 flex items-center justify-center gap-2 text-yellow-700 text-sm font-bold">
             <ShieldAlert size={16} />
-            <span>Read-Only Mode Active. You cannot make changes.</span>
+            <span>Salt okunur mod aktif. Degisiklik yapamazsiniz.</span>
           </div>
         )}
 
@@ -338,9 +618,50 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             {activeTab === 'overview' && (
                 <div className="space-y-10 animate-fade-in-up">
                     <header>
-                       <h1 className="text-4xl font-extrabold text-black mb-2">Dashboard Overview</h1>
-                       <p className="text-gray-500 font-medium">Welcome back, here's what's happening today.</p>
+                       <h1 className="text-4xl font-extrabold text-black mb-2">Panel Ozeti</h1>
+                       <p className="text-gray-500 font-medium">Tekrar hos geldiniz, kontrol sende. Performans ve icerik durumu burada.</p>
                     </header>
+
+                {/* Plugin Switchboard */}
+                <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    <div>
+                                <h3 className="text-xl font-bold text-black flex items-center gap-2"><PlugZap size={20} className="text-brand-lime" /> Panel Eklentileri</h3>
+                      <p className="text-sm text-gray-500 mt-1">Widget'ları aç/kapat, paneli çalışma stiline göre kişiselleştir.</p>
+                    </div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400">{Object.values(plugins).filter(Boolean).length} aktif modül</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+                    {widgetOrder.map((widgetId) => {
+                      const plugin = [
+                      { key: 'insights' as PluginKey, title: 'Gelişmiş İçgörü', icon: Sparkles },
+                      { key: 'shortcuts' as PluginKey, title: 'Hızlı Aksiyonlar', icon: Layers3 },
+                      { key: 'serviceHeatmap' as PluginKey, title: 'Servis Isi Haritasi', icon: BarChart3 },
+                      { key: 'activityFeed' as PluginKey, title: 'Aktivite Akisi', icon: BellRing }
+                      ].find((p) => p.key === widgetId);
+
+                      if (!plugin) return null;
+
+                      return (
+                      <button
+                        key={plugin.key}
+                        draggable
+                        onDragStart={() => setDraggedWidget(plugin.key as WidgetId)}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={() => handleWidgetDrop(plugin.key as WidgetId)}
+                        onClick={() => togglePlugin(plugin.key)}
+                        className={`p-4 rounded-2xl border text-left transition-all ${plugins[plugin.key] ? 'border-black bg-black text-white' : 'border-gray-200 bg-white text-gray-700 hover:border-black'}`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <plugin.icon size={18} className={`${plugins[plugin.key] ? 'text-brand-lime' : 'text-gray-400'} mb-2`} />
+                          <GripVertical size={14} className="opacity-60" />
+                        </div>
+                        <p className="text-sm font-bold">{plugin.title}</p>
+                        <p className="text-[11px] opacity-70 mt-1">{plugins[plugin.key] ? 'Aktif' : 'Pasif'}</p>
+                      </button>
+                    );})}
+                  </div>
+                </div>
                     
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -350,7 +671,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                 <span className="flex items-center gap-1 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">+12%</span>
                             </div>
                             <h3 className="text-5xl font-black text-black mb-1">{projects.length}</h3>
-                            <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Total Projects</p>
+                            <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Toplam Proje</p>
                         </div>
                         <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 group hover:-translate-y-1 transition-transform">
                              <div className="flex justify-between items-start mb-8">
@@ -358,24 +679,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                 <span className="flex items-center gap-1 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">+5%</span>
                             </div>
                             <h3 className="text-5xl font-black text-black mb-1">{posts.length}</h3>
-                            <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Published Articles</p>
+                            <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Yayinlanan Yazi</p>
                         </div>
                         <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 group hover:-translate-y-1 transition-transform">
                              <div className="flex justify-between items-start mb-8">
                                 <div className="p-4 bg-gray-50 rounded-2xl group-hover:bg-brand-lime transition-colors"><MessageSquare size={24}/></div>
                             </div>
-                            <h3 className="text-5xl font-black text-black mb-1">{messages.length}</h3>
-                            <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Total Inquiries</p>
+                          <h3 className="text-5xl font-black text-black mb-1">{unreadCount}</h3>
+                          <p className="text-sm font-bold uppercase tracking-wider text-gray-400">Okunmamis Mesaj</p>
                         </div>
                          <div className="bg-black text-white p-6 rounded-[2rem] shadow-xl flex flex-col justify-center relative overflow-hidden">
                              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-lime opacity-20 rounded-full blur-3xl"></div>
                              <div className="relative z-10">
                                 <div className="flex items-center gap-2 mb-4 text-brand-lime">
                                    <Shield size={20} />
-                                   <span className="text-xs font-bold uppercase tracking-widest">System Status</span>
+                                    <span className="text-xs font-bold uppercase tracking-widest">Sistem Durumu</span>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-1">Operational</h3>
-                                <p className="text-gray-400 text-sm">All systems running smoothly.</p>
+                                  <h3 className="text-2xl font-bold mb-1">Aktif</h3>
+                                  <p className="text-gray-400 text-sm">Tum sistemler sorunsuz calisiyor.</p>
                              </div>
                         </div>
                     </div>
@@ -385,15 +706,111 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                         <div className="flex items-center justify-between mb-8">
                             <div>
                                <h3 className="text-xl font-bold text-black flex items-center gap-2">
-                                 <BarChart3 className="text-brand-lime" /> Profile Views
+                                 <BarChart3 className="text-brand-lime" /> Profil Goruntulenmeleri
                                </h3>
-                               <p className="text-sm text-gray-400 mt-1">Real-time visitor traffic (Total: {stats.total})</p>
+                               <p className="text-sm text-gray-400 mt-1">Gercek zamanli ziyaretci trafigi (Toplam: {stats.total})</p>
                             </div>
                             <div className="flex items-center gap-2 text-sm font-bold">
-                               <span className="w-3 h-3 rounded-full bg-brand-lime"></span> Organic
+                               <span className="w-3 h-3 rounded-full bg-brand-lime"></span> Organik
                             </div>
                         </div>
                         <StatsChart data={stats.monthly} />
+                    </div>
+
+                    {notificationText && (
+                      <div className="bg-brand-lime/20 text-black border border-brand-lime rounded-2xl px-4 py-3 text-sm font-bold">
+                        {notificationText}
+                      </div>
+                    )}
+
+                    {plugins.insights && (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                          <p className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-3">Blog Erisimi</p>
+                          <h4 className="text-3xl font-black">{totalPostViews}</h4>
+                          <p className="text-sm text-gray-500 mt-2">Toplam makale görüntülenmesi</p>
+                        </div>
+                        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                          <p className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-3">Ortalama Goruntuleme</p>
+                          <h4 className="text-3xl font-black">{avgPostViews}</h4>
+                          <p className="text-sm text-gray-500 mt-2">Makale başına ortalama görüntülenme</p>
+                        </div>
+                        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                          <p className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-3">Gelen Kutusu Durumu</p>
+                          <h4 className="text-3xl font-black">{liveMessages.length ? Math.round((unreadCount / liveMessages.length) * 100) : 0}%</h4>
+                          <p className="text-sm text-gray-500 mt-2">Henüz yanıt bekleyen mesaj oranı</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {plugins.shortcuts && (
+                      <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                          <div>
+                            <h3 className="text-xl font-bold text-black flex items-center gap-2"><Sparkles size={20} className="text-brand-lime" /> Hizli Aksiyon Merkezi</h3>
+                            <p className="text-sm text-gray-500 mt-1">Tek tikla icerik uret, disa aktarim al, gelen kutusunu temizle.</p>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                          <Button onClick={openAddProject} className="gap-2 justify-center" size="sm"><Plus size={16} /> Proje Ekle</Button>
+                          <Button onClick={openAddPost} className="gap-2 justify-center" size="sm"><Plus size={16} /> Yazi Ekle</Button>
+                          <button
+                            onClick={() => downloadCsv('projects.csv', projects.map((p) => ({ id: p.id, title: p.title, category: p.category, year: p.year, type: p.type, tags: p.tags.join('|') })))}
+                            className="h-10 rounded-xl border border-gray-200 font-bold text-sm hover:border-black transition-colors flex items-center justify-center gap-2"
+                          >
+                            <Download size={16} /> Projeler CSV
+                          </button>
+                          <button
+                            onClick={markAllAsRead}
+                            className="h-10 rounded-xl border border-gray-200 font-bold text-sm hover:border-black transition-colors flex items-center justify-center gap-2"
+                          >
+                            <CheckCircle2 size={16} /> Tümünü Okundu İşaretle
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                      {plugins.serviceHeatmap && (
+                        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                          <h3 className="text-xl font-bold text-black mb-5 flex items-center gap-2"><BarChart3 size={20} className="text-brand-lime" /> Servis Talep Isi Haritasi</h3>
+                          <div className="space-y-3">
+                            {Object.entries(serviceBreakdown).length === 0 && <p className="text-sm text-gray-400">Henüz servis talebi yok.</p>}
+                            {Object.entries(serviceBreakdown).map(([service, count]) => {
+                              const width = liveMessages.length ? Math.max((count / liveMessages.length) * 100, 8) : 8;
+                              return (
+                                <div key={service}>
+                                  <div className="flex items-center justify-between text-sm mb-1">
+                                    <span className="font-bold text-gray-700">{service}</span>
+                                    <span className="text-gray-500">{count}</span>
+                                  </div>
+                                  <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+                                    <div className="h-full bg-black rounded-full" style={{ width: `${width}%` }}></div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {plugins.activityFeed && (
+                        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+                          <h3 className="text-xl font-bold text-black mb-5 flex items-center gap-2"><BellRing size={20} className="text-brand-lime" /> Son Aktivite Akışı</h3>
+                          <div className="space-y-3">
+                            {activityFeed.length === 0 && <p className="text-sm text-gray-400">Aktivite yok.</p>}
+                            {activityFeed.map((item) => (
+                              <div key={item.id} className="p-4 rounded-xl border border-gray-100 bg-gray-50/70 flex items-start justify-between gap-4">
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-800">{item.label}</p>
+                                  <p className="text-xs text-gray-500 mt-1 flex items-center gap-1"><Clock3 size={12} /> {item.time}</p>
+                                </div>
+                                <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-full bg-white border border-gray-200 text-gray-500">{item.type}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                 </div>
             )}
@@ -402,26 +819,40 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             {activeTab === 'projects' && (
                 <div className="space-y-8 animate-fade-in-up">
                      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <h1 className="text-3xl font-extrabold text-black">Projects Management</h1>
+                        <h1 className="text-3xl font-extrabold text-black">Proje Yonetimi</h1>
                         <div className="flex items-center gap-3 w-full md:w-auto">
+                        <div className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl bg-white">
+                          <SlidersHorizontal size={16} className="text-gray-400" />
+                          <select value={projectSort} onChange={(e) => setProjectSort(e.target.value as 'latest' | 'title' | 'type')} className="text-sm font-semibold bg-transparent outline-none">
+                                <option value="latest">En Yeni</option>
+                                <option value="title">Baslik A-Z</option>
+                                <option value="type">Tur</option>
+                          </select>
+                        </div>
                            <div className="relative flex-1 md:w-64">
                               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                               <input 
                                 type="text" 
-                                placeholder="Search projects..." 
+                                placeholder="Proje ara..." 
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:border-black outline-none transition-all"
                               />
                            </div>
                            {isAdmin && (
-                               <Button onClick={openAddProject} size="sm" className="gap-2 shadow-lg whitespace-nowrap"><Plus size={18}/> Add New</Button>
+                               <Button onClick={openAddProject} size="sm" className="gap-2 shadow-lg whitespace-nowrap"><Plus size={18}/> Yeni Ekle</Button>
                            )}
+                           <button
+                             onClick={() => downloadCsv('projects.csv', filteredProjects.map((p) => ({ id: p.id, title: p.title, category: p.category, type: p.type, year: p.year, tags: p.tags.join('|') })))}
+                             className="h-10 px-4 rounded-xl border border-gray-200 font-bold text-sm hover:border-black transition-colors flex items-center gap-2"
+                           >
+                             <Download size={16} /> CSV
+                           </button>
                         </div>
                      </div>
 
                      <div className="grid grid-cols-1 gap-4">
-                        {filteredProjects.length === 0 && <p className="text-center text-gray-400 py-10">No projects found.</p>}
+                        {filteredProjects.length === 0 && <p className="text-center text-gray-400 py-10">Proje bulunamadi.</p>}
                         {filteredProjects.map(project => (
                             <div key={project.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-6 hover:shadow-md transition-shadow">
                                 <img src={project.image} alt={project.title} className="w-full md:w-24 h-48 md:h-24 object-cover rounded-xl bg-gray-100" />
@@ -451,26 +882,40 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             {activeTab === 'blog' && (
                 <div className="space-y-8 animate-fade-in-up">
                      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <h1 className="text-3xl font-extrabold text-black">Blog Articles</h1>
+                        <h1 className="text-3xl font-extrabold text-black">Blog Yazilari</h1>
                         <div className="flex items-center gap-3 w-full md:w-auto">
+                        <div className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl bg-white">
+                          <SlidersHorizontal size={16} className="text-gray-400" />
+                          <select value={postSort} onChange={(e) => setPostSort(e.target.value as 'latest' | 'title' | 'views')} className="text-sm font-semibold bg-transparent outline-none">
+                                <option value="latest">En Yeni</option>
+                                <option value="title">Baslik A-Z</option>
+                                <option value="views">En Cok Goruntulenen</option>
+                          </select>
+                        </div>
                            <div className="relative flex-1 md:w-64">
                               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                               <input 
                                 type="text" 
-                                placeholder="Search articles..." 
+                                placeholder="Yazi ara..." 
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:border-black outline-none transition-all"
                               />
                            </div>
                            {isAdmin && (
-                               <Button onClick={openAddPost} size="sm" className="gap-2 shadow-lg whitespace-nowrap"><Plus size={18}/> Write Article</Button>
+                               <Button onClick={openAddPost} size="sm" className="gap-2 shadow-lg whitespace-nowrap"><Plus size={18}/> Yazi Ekle</Button>
                            )}
+                           <button
+                             onClick={() => downloadCsv('posts.csv', filteredPosts.map((p) => ({ id: p.id, title: p.title, date: p.date, views: p.views || 0, tags: p.tags.join('|') })))}
+                             className="h-10 px-4 rounded-xl border border-gray-200 font-bold text-sm hover:border-black transition-colors flex items-center gap-2"
+                           >
+                             <Download size={16} /> CSV
+                           </button>
                         </div>
                      </div>
 
                      <div className="grid grid-cols-1 gap-4">
-                        {filteredPosts.length === 0 && <p className="text-center text-gray-400 py-10">No articles found.</p>}
+                        {filteredPosts.length === 0 && <p className="text-center text-gray-400 py-10">Yazi bulunamadi.</p>}
                         {filteredPosts.map(post => (
                             <div key={post.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-6 hover:shadow-md transition-shadow">
                                 <div className="w-full md:w-24 h-48 md:h-24 relative rounded-xl overflow-hidden flex-shrink-0">
@@ -500,25 +945,94 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             {/* MESSAGES TAB */}
             {activeTab === 'messages' && (
                 <div className="space-y-8 animate-fade-in-up">
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-3xl font-extrabold text-black">Inbox</h1>
-                         <div className="relative w-64">
+                    <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+                        <h1 className="text-3xl font-extrabold text-black">Gelen Kutusu</h1>
+                        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500">
+                          <RefreshCw size={14} className={syncPulse ? 'animate-spin' : ''} /> canli senkronizasyon
+                        </div>
+                         <div className="flex flex-wrap items-center gap-3">
+                            <div className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl bg-white">
+                               <CircleDashed size={16} className="text-gray-400" />
+                               <select value={messageFilter} onChange={(e) => setMessageFilter(e.target.value as 'all' | 'unread' | 'read')} className="text-sm font-semibold bg-transparent outline-none">
+                                 <option value="all">Tum</option>
+                                 <option value="unread">Okunmamis</option>
+                                 <option value="read">Okunmus</option>
+                               </select>
+                            </div>
+                            <div className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl bg-white">
+                               <Layers3 size={16} className="text-gray-400" />
+                               <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)} className="text-sm font-semibold bg-transparent outline-none">
+                                 <option value="all">Tum Hizmetler</option>
+                                 {serviceOptions.map((service) => (
+                                   <option key={service} value={service}>{service}</option>
+                                 ))}
+                               </select>
+                            </div>
+                            <button
+                              onClick={() => downloadCsv('messages.csv', filteredMessages.map((m) => ({ id: m.id, name: m.name, email: m.email, service: m.service, budget: m.budget, date: m.date })))}
+                              className="h-10 px-4 rounded-xl border border-gray-200 font-bold text-sm hover:border-black transition-colors flex items-center gap-2"
+                            >
+                              <Download size={16} /> CSV
+                            </button>
+                            <button
+                              onClick={markAllAsRead}
+                              className="h-10 px-4 rounded-xl border border-gray-200 font-bold text-sm hover:border-black transition-colors flex items-center gap-2"
+                            >
+                              <CheckCircle2 size={16} /> Tumunu Okundu Yap
+                            </button>
+                            <div className="relative w-64">
                               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                               <input 
                                 type="text" 
-                                placeholder="Search messages..." 
+                                placeholder="Mesaj ara..." 
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:border-black outline-none transition-all"
                               />
+                            </div>
                            </div>
                     </div>
 
                     {filteredMessages.length === 0 ? (
                         <div className="text-center py-20 bg-white rounded-[2rem]">
-                            <p className="text-gray-400 text-lg">No messages found.</p>
+                            <p className="text-gray-400 text-lg">Mesaj bulunamadi.</p>
                         </div>
                     ) : (
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+                              {kanbanColumns.map((col) => (
+                                <div
+                                  key={col.key}
+                                  onDragOver={(e) => e.preventDefault()}
+                                  onDrop={() => {
+                                    if (draggedMessageId) {
+                                      updateMessageStatus(draggedMessageId, col.key);
+                                      setDraggedMessageId(null);
+                                    }
+                                  }}
+                                  className={`rounded-2xl border p-4 ${col.tone}`}
+                                >
+                                  <h3 className="text-sm font-extrabold tracking-wide uppercase mb-3">{col.title}</h3>
+                                  <div className="space-y-2 min-h-[140px]">
+                                    {liveMessages
+                                      .filter((m) => (m.status || 'new') === col.key)
+                                      .slice(0, 6)
+                                      .map((m) => (
+                                        <div
+                                          key={`kanban-${m.id}`}
+                                          draggable
+                                          onDragStart={() => setDraggedMessageId(m.id)}
+                                          className="bg-white rounded-xl border border-gray-200 p-3 cursor-grab active:cursor-grabbing"
+                                        >
+                                          <p className="font-bold text-sm text-gray-800 truncate">{m.name}</p>
+                                          <p className="text-xs text-gray-500 truncate mt-1">{m.service}</p>
+                                        </div>
+                                      ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
                         <div className="space-y-4">
                             {filteredMessages.map((msg) => (
                                 <div key={msg.id} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:border-black/20 transition-colors">
@@ -528,7 +1042,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                                 {msg.name.charAt(0)}
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-black">{msg.name}</h3>
+                                                <div className="flex items-center gap-2">
+                                                  <h3 className="text-xl font-bold text-black">{msg.name}</h3>
+                                                  {readMessageIds.includes(msg.id) ? (
+                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-50 text-green-600 font-bold uppercase tracking-wider flex items-center gap-1"><CheckCircle2 size={12} /> okunmus</span>
+                                                  ) : (
+                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-700 font-bold uppercase tracking-wider flex items-center gap-1"><BellRing size={12} /> okunmamis</span>
+                                                  )}
+                                                </div>
                                                 <p className="text-gray-500 text-sm">{msg.email}</p>
                                             </div>
                                         </div>
@@ -539,16 +1060,35 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                     </div>
                                     <div className="pl-0 md:pl-16">
                                          <div className="mb-4">
-                                             <span className="text-xs font-bold uppercase text-gray-400 tracking-wider">Budget</span>
+                                             <span className="text-xs font-bold uppercase text-gray-400 tracking-wider">Butce</span>
                                              <p className="font-semibold text-black">{msg.budget}</p>
                                          </div>
                                          <div>
-                                             <span className="text-xs font-bold uppercase text-gray-400 tracking-wider">Message</span>
+                                             <span className="text-xs font-bold uppercase text-gray-400 tracking-wider">Mesaj</span>
                                              <p className="text-gray-700 mt-2 leading-relaxed bg-gray-50 p-4 rounded-xl">{msg.message}</p>
+                                         </div>
+                                         {!readMessageIds.includes(msg.id) && (
+                                           <div className="mt-4">
+                                             <button onClick={() => markMessageAsRead(msg.id)} className="h-9 px-4 rounded-lg border border-gray-200 hover:border-black transition-colors text-sm font-bold flex items-center gap-2">
+                                               <CheckCircle2 size={14} /> Okundu Olarak İşaretle
+                                             </button>
+                                           </div>
+                                         )}
+                                         <div className="mt-4 flex flex-wrap gap-2">
+                                           {kanbanColumns.map((col) => (
+                                             <button
+                                               key={`${msg.id}-${col.key}`}
+                                               onClick={() => updateMessageStatus(msg.id, col.key)}
+                                               className={`h-8 px-3 rounded-lg border text-xs font-bold uppercase tracking-wider transition-colors ${(msg.status || 'new') === col.key ? 'border-black bg-black text-white' : 'border-gray-200 hover:border-black'}`}
+                                             >
+                                               {col.title}
+                                             </button>
+                                           ))}
                                          </div>
                                     </div>
                                 </div>
                             ))}
+                        </div>
                         </div>
                     )}
                 </div>
@@ -564,7 +1104,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
             <div className="bg-white rounded-[2.5rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 p-8 md:p-10 animate-fade-in-up shadow-2xl">
                 <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-6">
                     <h2 className="text-3xl font-extrabold text-black">
-                        {formData.id ? 'Edit' : 'Create New'} {editingType === 'project' ? 'Project' : 'Article'}
+                        {formData.id ? 'Duzenle' : 'Yeni Olustur'} {editingType === 'project' ? 'Proje' : 'Yazi'}
                     </h2>
                     <button onClick={() => setIsEditing(false)} className="p-2 bg-gray-100 rounded-full hover:bg-black hover:text-white transition-colors"><X size={20}/></button>
                 </div>
@@ -574,7 +1114,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                     {/* Common Fields */}
                     <div className="space-y-2">
                          <Input 
-                            label="Title" 
+                           label="Baslik" 
                             value={formData.title || ''} 
                             onChange={e => setFormData({...formData, title: e.target.value})} 
                             required 
@@ -583,7 +1123,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                     </div>
                     
                     <div className="space-y-2">
-                        <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wide">Cover Image</label>
+                        <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wide">Kapak Gorseli</label>
                         <div className="flex items-center gap-4">
                             <input 
                                 type="file" 
@@ -596,9 +1136,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-lime file:text-black hover:file:bg-black hover:file:text-white transition-all"
                             />
                         </div>
-                        <div className="text-xs text-gray-400 text-center font-bold uppercase my-2">- OR -</div>
+                        <div className="text-xs text-gray-400 text-center font-bold uppercase my-2">- VEYA -</div>
                         <Input 
-                            label="Image URL" 
+                          label="Gorsel URL" 
                             value={formData.image || ''} 
                             onChange={e => setFormData({...formData, image: e.target.value})} 
                             placeholder="https://..." 
@@ -607,31 +1147,31 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                             <img 
                                 src={formData.imageFile ? URL.createObjectURL(formData.imageFile) : formData.image} 
                                 className="w-full h-40 object-cover rounded-xl mt-2 border border-gray-200" 
-                                alt="Preview"
+                                alt="Onizleme"
                             />
                          )}
                     </div>
                     
                     <Input 
-                        label="Tags (comma separated)" 
+                        label="Etiketler (virgulle ayir)" 
                         value={formData.tags?.join(', ') || ''} 
                         onChange={e => setFormData({...formData, tags: e.target.value.split(',').map((s: string) => s.trim())})} 
-                        placeholder="React, AI, Design..."
+                        placeholder="React, AI, Tasarim..."
                     />
 
                     {/* PROJECT SPECIFIC FIELDS */}
                     {editingType === 'project' && (
                         <>
-                             <div className="grid grid-cols-2 gap-6">
-                                <Input label="Category" value={formData.category || ''} onChange={e => setFormData({...formData, category: e.target.value})} />
-                                <Input label="Type (Backend/Frontend/Data)" value={formData.type || ''} onChange={e => setFormData({...formData, type: e.target.value})} />
+                            <div className="grid grid-cols-2 gap-6">
+                              <Input label="Kategori" value={formData.category || ''} onChange={e => setFormData({...formData, category: e.target.value})} />
+                              <Input label="Tur (Backend/Frontend/Veri)" value={formData.type || ''} onChange={e => setFormData({...formData, type: e.target.value})} />
                             </div>
                             <div className="grid grid-cols-2 gap-6">
-                                <Input label="Client" value={formData.client || ''} onChange={e => setFormData({...formData, client: e.target.value})} />
-                                <Input label="Role" value={formData.role || ''} onChange={e => setFormData({...formData, role: e.target.value})} />
+                              <Input label="Musteri" value={formData.client || ''} onChange={e => setFormData({...formData, client: e.target.value})} />
+                                <Input label="Rol" value={formData.role || ''} onChange={e => setFormData({...formData, role: e.target.value})} />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Description</label>
+                              <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Aciklama</label>
                                 <textarea 
                                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-black outline-none h-32 resize-none transition-all"
                                     value={formData.description || ''}
@@ -645,11 +1185,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                     {editingType === 'post' && (
                         <>
                              <div className="grid grid-cols-2 gap-6">
-                                <Input label="Read Time" value={formData.readTime || ''} onChange={e => setFormData({...formData, readTime: e.target.value})} placeholder="5 min read" />
-                                <Input label="Date" value={formData.date || ''} onChange={e => setFormData({...formData, date: e.target.value})} />
+                                <Input label="Okuma Suresi" value={formData.readTime || ''} onChange={e => setFormData({...formData, readTime: e.target.value})} placeholder="5 dk" />
+                                <Input label="Tarih" value={formData.date || ''} onChange={e => setFormData({...formData, date: e.target.value})} />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Excerpt (Short Summary)</label>
+                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Ozet (Kisa)</label>
                                 <textarea 
                                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-black outline-none h-24 resize-none transition-all"
                                     value={formData.excerpt || ''}
@@ -657,8 +1197,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                                 ></textarea>
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Full Content (Markdown)</label>
-                                <div className="text-xs text-gray-400 mb-2 font-mono bg-gray-50 p-2 rounded">Use ## for H3, - for lists</div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Tam Icerik (Markdown)</label>
+                                <div className="text-xs text-gray-400 mb-2 font-mono bg-gray-50 p-2 rounded">Baslik icin ##, liste icin - kullanin</div>
                                 <textarea 
                                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-black outline-none h-64 font-mono text-sm transition-all"
                                     value={formData.content || ''}
@@ -669,7 +1209,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, projects, posts, 
                     )}
 
                     <div className="pt-6 border-t border-gray-100">
-                        <Button type="submit" fullWidth className="gap-2 shadow-xl hover:shadow-2xl hover:-translate-y-1"><Save size={18}/> Save Changes</Button>
+                        <Button type="submit" fullWidth className="gap-2 shadow-xl hover:shadow-2xl hover:-translate-y-1"><Save size={18}/> Degisiklikleri Kaydet</Button>
                     </div>
                 </form>
             </div>

@@ -2,10 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import pool from './db.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
 import { v2 as cloudinary } from 'cloudinary';
 import streamifier from 'streamifier';
 import dotenv from 'dotenv';
@@ -17,6 +17,44 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const createAccessToken = (user) => {
+  if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET is not configured');
+  }
+
+  return jwt.sign(
+    { username: user.username, role: 'admin' },
+    JWT_SECRET,
+    { expiresIn: '12h' }
+  );
+};
+
+const authenticateAdmin = (req, res, next) => {
+  if (!JWT_SECRET) {
+    return res.status(500).json({ message: 'JWT configuration missing on server' });
+  }
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const token = authHeader.slice(7);
+
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    if (payload.role !== 'admin') {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    req.user = payload;
+    next();
+  } catch {
+    return res.status(401).json({ message: 'Invalid or expired token' });
+  }
+};
 
 // Cloudinary Konfigürasyonu
 cloudinary.config({ 
@@ -113,9 +151,12 @@ const initDb = async () => {
         service VARCHAR(100),
         budget VARCHAR(50),
         message TEXT,
+        status VARCHAR(30) DEFAULT 'new',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
+
+    await pool.query("ALTER TABLE proposals ADD COLUMN IF NOT EXISTS status VARCHAR(30) DEFAULT 'new'");
 
     // Ziyaretler Tablosu
     await pool.query(`
@@ -125,26 +166,23 @@ const initDb = async () => {
       );
     `);
 
-    // Admin Kullanıcısı ve Şifre Güncelleme
-    const targetPassword = 'Piner842301.#';
-    const hashedPassword = await bcrypt.hash(targetPassword, 10);
-    
-    const userCheck = await pool.query("SELECT * FROM admin_users WHERE username = 'pinardev'");
-    
-    if (userCheck.rows.length === 0) {
-      // Kullanıcı yoksa oluştur
-      await pool.query(
-        "INSERT INTO admin_users (username, password) VALUES ($1, $2)",
-        ['pinardev', hashedPassword]
-      );
-      console.log('Admin kullanıcısı oluşturuldu.');
+    // İlk kurulum için admin kullanıcısını sadece env değişkenleri tanımlıysa oluştur.
+    const adminUsername = process.env.ADMIN_USERNAME;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (adminUsername && adminPassword) {
+      const userCheck = await pool.query("SELECT * FROM admin_users WHERE username = $1", [adminUsername]);
+
+      if (userCheck.rows.length === 0) {
+        const hashedPassword = await bcrypt.hash(adminPassword, 10);
+        await pool.query(
+          "INSERT INTO admin_users (username, password) VALUES ($1, $2)",
+          [adminUsername, hashedPassword]
+        );
+        console.log('Admin kullanıcısı oluşturuldu.');
+      }
     } else {
-      // Kullanıcı varsa şifresini güncelle (Her ihtimale karşı)
-      await pool.query(
-        "UPDATE admin_users SET password = $1 WHERE username = 'pinardev'",
-        [hashedPassword]
-      );
-      console.log('Admin şifresi güncellendi/doğrulandı.');
+      console.warn('ADMIN_USERNAME ve ADMIN_PASSWORD tanımlı değil. Admin seed atlandı.');
     }
 
     console.log('Veritabanı tabloları hazır.');
@@ -158,6 +196,11 @@ initDb();
 // Login Endpoint (Bcrypt ile)
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ success: false, message: 'Kullanıcı adı ve şifre zorunludur' });
+  }
+
   try {
     const result = await pool.query(
       "SELECT * FROM admin_users WHERE username = $1",
@@ -169,7 +212,8 @@ app.post('/api/login', async (req, res) => {
       const match = await bcrypt.compare(password, user.password);
       
       if (match) {
-        res.json({ success: true, user: { username: user.username, role: 'admin' } });
+        const token = createAccessToken(user);
+        res.json({ success: true, user: { username: user.username, role: 'admin' }, token });
       } else {
         res.status(401).json({ success: false, message: 'Geçersiz şifre' });
       }
@@ -194,7 +238,7 @@ app.get('/api/projects', async (req, res) => {
 });
 
 // Proje Ekle (Resimli - Cloudinary)
-app.post('/api/projects', upload.single('image'), async (req, res) => {
+app.post('/api/projects', authenticateAdmin, upload.single('image'), async (req, res) => {
   try {
     const { title, category, year, type, tags, client, role, description } = req.body;
     let imagePath = req.body.image; // Eğer URL olarak geldiyse
@@ -219,7 +263,7 @@ app.post('/api/projects', upload.single('image'), async (req, res) => {
 });
 
 // Proje Güncelle (Resimli - Cloudinary)
-app.put('/api/projects/:id', upload.single('image'), async (req, res) => {
+app.put('/api/projects/:id', authenticateAdmin, upload.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
     const { title, category, year, type, tags, client, role, description } = req.body;
@@ -244,7 +288,7 @@ app.put('/api/projects/:id', upload.single('image'), async (req, res) => {
 });
 
 // Proje Sil
-app.delete('/api/projects/:id', async (req, res) => {
+app.delete('/api/projects/:id', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     await pool.query("DELETE FROM projects WHERE id = $1", [id]);
@@ -267,7 +311,7 @@ app.get('/api/posts', async (req, res) => {
 });
 
 // Yazı Ekle (Resimli - Cloudinary)
-app.post('/api/posts', upload.single('image'), async (req, res) => {
+app.post('/api/posts', authenticateAdmin, upload.single('image'), async (req, res) => {
   try {
     const { title, excerpt, content, date, read_time, category, tags, author_name, author_role, author_avatar } = req.body;
     let imagePath = req.body.image;
@@ -291,7 +335,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
 });
 
 // Yazı Güncelle (Resimli - Cloudinary)
-app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
+app.put('/api/posts/:id', authenticateAdmin, upload.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
     const { title, excerpt, content, date, read_time, category, tags, author_name, author_role, author_avatar } = req.body;
@@ -316,7 +360,7 @@ app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
 });
 
 // Yazı Sil
-app.delete('/api/posts/:id', async (req, res) => {
+app.delete('/api/posts/:id', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     await pool.query("DELETE FROM blog_posts WHERE id = $1", [id]);
@@ -334,8 +378,8 @@ app.post('/api/messages', async (req, res) => {
   const { name, email, service, budget, message } = req.body;
   try {
     const result = await pool.query(
-      "INSERT INTO proposals (name, email, service, budget, message) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [name, email, service, budget, message]
+      "INSERT INTO proposals (name, email, service, budget, message, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [name, email, service, budget, message, 'new']
     );
     res.json(result.rows[0]);
   } catch (err) {
@@ -344,10 +388,35 @@ app.post('/api/messages', async (req, res) => {
 });
 
 // Mesajları Getirme Endpoint (Admin için)
-app.get('/api/messages', async (req, res) => {
+app.get('/api/messages', authenticateAdmin, async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM proposals ORDER BY created_at DESC");
     res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch('/api/messages/:id/status', authenticateAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  const allowed = ['new', 'in_progress', 'responded'];
+
+  if (!allowed.includes(status)) {
+    return res.status(400).json({ message: 'Invalid status' });
+  }
+
+  try {
+    const result = await pool.query(
+      'UPDATE proposals SET status = $1 WHERE id = $2 RETURNING *',
+      [status, id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ message: 'Message not found' });
+    }
+
+    res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -364,7 +433,7 @@ app.post('/api/visit', async (req, res) => {
 });
 
 // İstatistikleri Getirme Endpoint
-app.get('/api/stats', async (req, res) => {
+app.get('/api/stats', authenticateAdmin, async (req, res) => {
   try {
     // Son 12 ayın verilerini getir
     const result = await pool.query(`

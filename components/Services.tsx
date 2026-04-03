@@ -8,50 +8,50 @@ const Services: React.FC = () => {
 
   const services: ServiceData[] = [
     {
-      title: "Full-Stack Development",
+      title: "Full-Stack Gelistirme",
       icon: Layout,
-      description: "Building scalable web applications using ASP.NET Core, React, and Angular. Delivering responsive and user-friendly interfaces.",
-      detailedDescription: "I provide end-to-end web application development services. From conceptualization and UI/UX design to frontend implementation and backend integration. My focus is on creating high-performance, SEO-friendly, and responsive applications that work seamlessly across all devices.",
+      description: "ASP.NET Core, React ve Angular ile olceklenebilir web uygulamalari gelistiriyor; hizli ve kullanici dostu arayuzler sunuyorum.",
+      detailedDescription: "Uctan uca web uygulama gelistirme hizmeti sunuyorum. Fikir asamasindan UI/UX tasarimina, frontend uygulamadan backend entegrasyonuna kadar tum sureci yonetiyorum. Odagim; yuksek performansli, SEO uyumlu ve tum cihazlarda sorunsuz calisan responsive urunler olusturmaktir.",
       color: "text-blue-600",
       bg: "group-hover:bg-blue-50",
       features: [
-        "Single Page Applications (SPA)",
-        "Progressive Web Apps (PWA)",
-        "Responsive UI/UX Implementation",
-        "Server-Side Rendering (Next.js)",
-        "Cross-Browser Compatibility"
+        "Tek Sayfa Uygulamalari (SPA)",
+        "Asamali Web Uygulamalari (PWA)",
+        "Responsive UI/UX Uygulamasi",
+        "Sunucu Tarafli Render (Next.js)",
+        "Tarayicilar Arasi Uyumluluk"
       ],
       technologies: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Redux", "Angular"]
     },
     {
-      title: "Backend & Microservices",
+      title: "Backend ve Mikroservis",
       icon: Code,
-      description: "Designing robust RESTful APIs, implementing JWT authentication, and creating microservice architectures with Java and C#.",
-      detailedDescription: "I specialize in architecting secure and scalable server-side systems. Whether you need a monolithic API for a startup or a distributed microservices architecture for an enterprise, I ensure code quality, security, and performance optimization.",
+      description: "Saglam RESTful API'ler tasarlayip JWT kimlik dogrulama uygular, Java ve C# ile mikroservis mimarileri kuruyorum.",
+      detailedDescription: "Guvenli ve olceklenebilir sunucu tarafi sistem mimarileri kurma konusunda uzmanim. Startup icin monolitik API de, kurumsal yapi icin daginik mikroservis mimarisi de gerekiyorsa; kod kalitesi, guvenlik ve performans optimizasyonunu birlikte sagliyorum.",
       color: "text-green-600",
       bg: "group-hover:bg-green-50",
       features: [
-        "RESTful & GraphQL API Design",
-        "Microservices Architecture",
-        "JWT Authentication & OAuth2",
-        "Database Optimization (SQL/NoSQL)",
-        "Docker & Kubernetes Deployment"
+        "RESTful ve GraphQL API Tasarimi",
+        "Mikroservis Mimarisi",
+        "JWT Kimlik Dogrulama ve OAuth2",
+        "Veritabani Optimizasyonu (SQL/NoSQL)",
+        "Docker ve Kubernetes Dagitimi"
       ],
       technologies: ["C#", ".NET Core", "Java", "Spring Boot", "PostgreSQL", "Redis", "Docker"]
     },
     {
-      title: "Data Science & AI",
+      title: "Veri Bilimi ve Yapay Zeka",
       icon: Database,
-      description: "Developing machine learning models, processing data with Python (Pandas, NumPy), and providing data-driven insights.",
-      detailedDescription: "Unlock the power of your data with advanced analytics and AI integration. I help businesses automate processes, predict trends, and gain actionable insights through custom machine learning models and data visualization dashboards.",
+      description: "Python (Pandas, NumPy) ile makine ogrenmesi modelleri gelistiriyor, veriyi isleyip veriye dayali icgoruler uretiyorum.",
+      detailedDescription: "Gelismis analitik ve yapay zeka entegrasyonu ile verinizin potansiyelini ortaya cikariyorum. Isletmelerin sureclerini otomatiklestirmesine, trendleri tahmin etmesine ve ozel ML modelleri ile veri gorsellestirme panelleri sayesinde aksiyon alinabilir icgoruler elde etmesine destek oluyorum.",
       color: "text-purple-600",
       bg: "group-hover:bg-purple-50",
       features: [
-        "Predictive Modeling & Forecasting",
-        "Natural Language Processing (NLP)",
-        "Data Visualization Dashboards",
-        "ETL Pipeline Development",
-        "AI Model Integration via API"
+        "Tahminleme ve Ongorulu Modellemler",
+        "Dogal Dil Isleme (NLP)",
+        "Veri Gorsellestirme Panelleri",
+        "ETL Hatti Gelistirme",
+        "API Uzerinden AI Model Entegrasyonu"
       ],
       technologies: ["Python", "Pandas", "Scikit-learn", "TensorFlow", "Matplotlib", "SQL"]
     }
@@ -62,12 +62,12 @@ const Services: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center mb-20">
-           <span className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2 block">Expertise</span>
+           <span className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2 block">Uzmanlik</span>
            <h2 className="text-4xl md:text-5xl font-extrabold text-black mb-6">
-            Technical Capabilities
+            Teknik Yetkinlikler
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-            Leveraging cutting-edge technologies to build secure, scalable, and efficient software solutions.
+            Guvenli, olceklenebilir ve verimli yazilim cozumleri icin modern teknolojiler kullaniyorum.
           </p>
         </div>
 
@@ -91,7 +91,7 @@ const Services: React.FC = () => {
               </p>
 
               <div className="flex items-center text-sm font-bold text-black group-hover:gap-2 transition-all">
-                <span>Learn More</span>
+                <span>Daha Fazla</span>
                 <ArrowRight size={16} />
               </div>
             </div>

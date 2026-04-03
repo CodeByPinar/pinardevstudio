@@ -130,10 +130,17 @@ Ana dizinde `.env` dosyası oluşturun ve aşağıdaki değerleri kendinize gör
 ```env
 PORT=5000
 DATABASE_URL=postgresql://kullanici:sifre@localhost:5432/veritabani_adi
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=your_local_db_password
+DB_NAME=projelerim_db
 CLOUDINARY_CLOUD_NAME=xxx
 CLOUDINARY_API_KEY=xxx
 CLOUDINARY_API_SECRET=xxx
 JWT_SECRET=cok_gizli_anahtar
+ADMIN_USERNAME=admin_username
+ADMIN_PASSWORD=admin_password
 ```
 
 ### 5. Uygulamayı Başlatın
@@ -159,10 +166,10 @@ Temel API uç noktaları aşağıdadır:
 | Metot | Endpoint | Açıklama |
 | :--- | :--- | :--- |
 | `GET` | `/api/projects` | Tüm projeleri listeler |
-| `GET` | `/api/blogs` | Blog yazılarını listeler |
-| `POST` | `/api/auth/login` | Admin girişi yapar |
+| `GET` | `/api/posts` | Blog yazılarını listeler |
+| `POST` | `/api/login` | Admin girişi yapar ve JWT döner |
 | `POST` | `/api/projects` | Yeni proje ekler (Auth Gerekli) |
-| `DELETE` | `/api/blogs/:id` | Blog yazısını siler (Auth Gerekli) |
+| `DELETE` | `/api/posts/:id` | Blog yazısını siler (Auth Gerekli) |
 
 ---
 

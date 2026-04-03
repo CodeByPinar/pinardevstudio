@@ -7,12 +7,12 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { name: 'About', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Projects', href: '#portfolio' },
-    { name: 'Quote', href: '#proposal' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Hakkimda', href: '#about' },
+    { name: 'Hizmetler', href: '#services' },
+    { name: 'Deneyim', href: '#experience' },
+    { name: 'Projeler', href: '#portfolio' },
+    { name: 'Teklif', href: '#proposal' },
+    { name: 'Iletisim', href: '#contact' },
   ];
 
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
           {/* Logo */}
           <a href="#" className="flex-shrink-0 flex items-center gap-1 cursor-pointer group">
             <span className="font-bold text-xl tracking-tight group-hover:opacity-80 transition-opacity">Pınar.</span>
-            <span className="bg-brand-lime px-2 py-0.5 rounded-full text-xs font-bold border border-black/5 group-hover:scale-105 transition-transform">Tech Studio</span>
+            <span className="bg-brand-lime px-2 py-0.5 rounded-full text-xs font-bold border border-black/5 group-hover:scale-105 transition-transform">Yazilim Studio</span>
           </a>
 
           {/* Desktop Menu */}
@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
           <div className="hidden md:block">
             <a href="#portfolio" onClick={handleScroll}>
                 <Button variant="white" size="sm" className="border-black hover:bg-black hover:text-white transition-colors">
-                View Work
+                Calismalari Gor
                 </Button>
             </a>
           </div>
@@ -89,7 +89,7 @@ const Navbar: React.FC = () => {
             <div className="pt-4">
               <a href="#portfolio" onClick={handleScroll}>
                 <Button variant="primary" fullWidth>
-                  View Work
+                  Calismalari Gor
                 </Button>
               </a>
             </div>

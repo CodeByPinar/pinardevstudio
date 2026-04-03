@@ -6,51 +6,51 @@ const TechStack: React.FC = () => {
   const technologies = [
     {
       name: 'ASP.NET Core',
-      category: 'Backend Framework',
+      category: 'Backend Catisi',
       icon: Server,
-      description: 'Building high-performance, cross-platform web APIs and scalable server-side applications.'
+      description: 'Yuksek performansli, platformlar arasi web API ve olceklenebilir sunucu uygulamalari gelistirme.'
     },
     {
       name: 'React Ecosystem',
-      category: 'Frontend Library',
+      category: 'Frontend Kutuphanesi',
       icon: Code2,
-      description: 'Creating dynamic user interfaces with React, Next.js, Redux, and modern hooks patterns.'
+      description: 'React, Next.js, Redux ve modern hooks desenleri ile dinamik kullanici arayuzleri olusturma.'
     },
     {
       name: 'C# & .NET',
-      category: 'Core Language',
+      category: 'Temel Dil',
       icon: Terminal,
-      description: 'Leveraging strong typing and object-oriented features for robust enterprise solutions.'
+      description: 'Kurumsal olcekte guclu cozumler icin tip guvenligi ve nesne yonelimli yaklasimdan yararlanma.'
     },
     {
       name: 'Microservices',
-      category: 'Architecture',
+      category: 'Mimari',
       icon: Layers,
-      description: 'Designing distributed systems using Docker, Kubernetes, and event-driven patterns.'
+      description: 'Docker, Kubernetes ve event-driven desenlerle daginik sistem mimarisi tasarlama.'
     },
     {
       name: 'Python & AI',
-      category: 'Data Science',
+      category: 'Veri Bilimi',
       icon: Cpu,
-      description: 'Developing machine learning models and data processing pipelines with Pandas & Scikit-learn.'
+      description: 'Pandas ve Scikit-learn ile makine ogrenmesi modelleri ve veri isleme hatlari gelistirme.'
     },
     {
       name: 'SQL & Databases',
-      category: 'Data Persistence',
+      category: 'Veri Saklama',
       icon: Database,
-      description: 'Optimizing schema design and queries for PostgreSQL, SQL Server, and Redis.'
+      description: 'PostgreSQL, SQL Server ve Redis icin sema ve sorgu optimizasyonu.'
     },
     {
       name: 'Angular',
-      category: 'Frontend Framework',
+      category: 'Frontend Catisi',
       icon: Globe,
-      description: 'Building structured, large-scale enterprise single-page applications with TypeScript.'
+      description: 'TypeScript ile yapisal ve kurumsal olcekte single-page uygulamalar gelistirme.'
     },
     {
       name: 'Java Spring',
-      category: 'Backend Framework',
+      category: 'Backend Catisi',
       icon: Coffee,
-      description: 'Experience in building secure and transactional backend systems with Spring Boot.'
+      description: 'Spring Boot ile guvenli ve islemsel backend sistemleri gelistirme deneyimi.'
     }
   ];
 
@@ -58,10 +58,10 @@ const TechStack: React.FC = () => {
     <section className="py-24 bg-gray-50 relative border-t border-gray-100" id="tech-stack">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2 block">Tools & Technologies</span>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-black mb-6">Core Tech Stack</h2>
+          <span className="text-brand-green font-bold tracking-wider uppercase text-sm mb-2 block">Araclar ve Teknolojiler</span>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-black mb-6">Temel Teknoloji Yigini</h2>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-            A curated selection of the powerful technologies I use to build digital products.
+            Dijital urunler gelistirirken aktif olarak kullandigim guclu teknolojilerden secmeler.
           </p>
         </div>
 

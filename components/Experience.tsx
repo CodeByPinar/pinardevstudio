@@ -4,27 +4,27 @@ const Experience: React.FC = () => {
   const jobs = [
     {
       company: "QMIND SOLUTIONS",
-      role: "Data Scientist",
-      period: "Apr 2021 — Present",
-      desc: "Managed end-to-end data processing, model development, and evaluation for ML/Data Analytics projects. Developed regression, classification, and time-series models for real-time decision support systems. Utilized Python, Pandas, NumPy, and Scikit-learn for optimization and prepared visualization dashboards."
+      role: "Veri Bilimci",
+      period: "Nis 2021 — Guncel",
+      desc: "Makine ogrenmesi ve veri analitigi projelerinde uctan uca veri isleme, model gelistirme ve degerlendirme sureclerini yonettim. Gercek zamanli karar destek sistemleri icin regresyon, siniflandirma ve zaman serisi modelleri gelistirdim. Python, Pandas, NumPy ve Scikit-learn kullanarak optimizasyon yapip gorsellestirme panelleri hazirladim."
     },
     {
       company: "RADICALX",
-      role: "AI Intern",
-      period: "Aug 2023 — Jan 2024",
-      desc: "Designed and implemented experiments to evaluate AI models in real-world scenarios. Tested models for accuracy, speed, and generalization capability. Analyzed datasets to create pre-processing workflows and supported R&D efforts using TensorFlow/PyTorch."
+      role: "Yapay Zeka Stajyeri",
+      period: "Agu 2023 — Oca 2024",
+      desc: "Yapay zeka modellerini gercek dunya senaryolarinda degerlendirmek icin deneyler tasarlayip uyguladim. Modelleri dogruluk, hiz ve genelleme kapasitesi acisindan test ettim. Veri setlerini analiz ederek on-isleme akislari olusturdum ve TensorFlow/PyTorch ile Ar-Ge calismalarina destek verdim."
     },
     {
       company: "TECHIOSITY TECHNOLOGY",
-      role: "Software Developer",
-      period: "Feb 2023 — Mar 2023",
-      desc: "Extended system functionality by integrating third-party APIs into Java backend modules. Performed debugging, refactoring, and performance optimizations. Enhanced Angular UI components and optimized frontend-backend integration via RESTful services."
+      role: "Yazilim Gelistirici",
+      period: "Sub 2023 — Mar 2023",
+      desc: "Java backend modullerine ucuncu taraf API entegrasyonlari yaparak sistem yeteneklerini genislettim. Hata ayiklama, refaktor ve performans iyilestirmeleri gerceklestirdim. Angular UI bilesenlerini gelistirip frontend-backend entegrasyonunu RESTful servisler uzerinden optimize ettim."
     },
     {
       company: "DIGITAL HELP",
-      role: "Web Developer",
-      period: "Dec 2022 — Feb 2023",
-      desc: "Developed user-friendly web interfaces from mockups using HTML, JavaScript, AJAX, and JSON. Created multi-step forms, dynamic content loading modules, and optimized UI components for both desktop and mobile devices."
+      role: "Web Gelistirici",
+      period: "Ara 2022 — Sub 2023",
+      desc: "HTML, JavaScript, AJAX ve JSON kullanarak mockup'lardan kullanici dostu web arayuzleri gelistirdim. Cok adimli formlar, dinamik icerik yukleme modulleri olusturdum; UI bilesenlerini masaustu ve mobil cihazlar icin optimize ettim."
     }
   ];
 
@@ -36,12 +36,12 @@ const Experience: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <span className="text-brand-lime font-bold tracking-wider uppercase text-sm mb-2 block">Career Path</span>
-            <h2 className="text-4xl md:text-5xl font-extrabold">Work Experience</h2>
+            <span className="text-brand-lime font-bold tracking-wider uppercase text-sm mb-2 block">Kariyer Yolu</span>
+            <h2 className="text-4xl md:text-5xl font-extrabold">Is Deneyimi</h2>
           </div>
           <div className="w-full md:w-auto">
               <a href="https://www.linkedin.com/in/pinardev/" target="_blank" rel="noreferrer" className="inline-block px-6 py-3 border border-gray-600 rounded-full hover:bg-white hover:text-black transition-colors font-semibold">
-                  View LinkedIn Profile
+                    LinkedIn Profilini Gor
               </a>
           </div>
         </div>

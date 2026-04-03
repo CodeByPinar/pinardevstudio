@@ -53,19 +53,19 @@ const Hero: React.FC = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-brand-green"></span>
             </span>
-            <span className="text-sm font-semibold text-gray-700">Available for new projects</span>
+            <span className="text-sm font-semibold text-gray-700">Yeni projeler icin musait</span>
           </div>
         </div>
 
         <div className="inline-flex items-center space-x-3 mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <span className="w-12 h-[2px] bg-black"></span>
-          <span className="text-black font-semibold tracking-wide uppercase text-sm">Hello, I'm Pınar Topuz 👋</span>
+          <span className="text-black font-semibold tracking-wide uppercase text-sm">Merhaba, ben Pinar Topuz 👋</span>
         </div>
 
         <h1 className="text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter text-black mb-8 leading-[0.9] animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           Full-Stack<br />
           <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-black via-gray-700 to-black">
-            Developer
+            Gelistirici
             {/* Underline decoration */}
             <svg className="absolute w-full h-4 -bottom-1 left-0 text-brand-lime opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
               <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
@@ -74,27 +74,27 @@ const Hero: React.FC = () => {
         </h1>
 
         <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed font-medium animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-          Innovative Full-Stack Developer with 4 years of experience building scalable web applications using 
-          <strong> ASP.NET Core</strong>, <strong>C#</strong>, and <strong>React</strong>. 
-          Expert in designing robust RESTful APIs, Microservices, and implementing Clean Architecture & SOLID principles.
+          4 yillik deneyime sahip Full-Stack gelistirici olarak
+          <strong> ASP.NET Core</strong>, <strong>C#</strong> ve <strong>React</strong> ile olceklenebilir web uygulamalari gelistiriyorum.
+          Guvenli REST API, mikroservis mimarisi ve Clean Architecture odakli cozumler uretiyorum.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
           <a href="#proposal" onClick={handleScroll}>
             <Button variant="primary" size="lg" className="min-w-[180px] shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                Get In Touch
+                Iletisime Gec
             </Button>
           </a>
           <a href="#portfolio" onClick={handleScroll}>
             <Button variant="white" size="lg" className="min-w-[180px] border-black shadow-[4px_4px_0px_rgba(200,200,200,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(200,200,200,1)] transition-all">
-                View Portfolio
+                Portfolyoyu Gor
             </Button>
           </a>
         </div>
 
         {/* Scroll Indicator */}
         <div className="absolute left-1/2 bottom-[-80px] transform -translate-x-1/2 animate-bounce hidden md:flex flex-col items-center gap-2 opacity-50">
-          <span className="text-xs font-medium uppercase tracking-widest">Scroll</span>
+          <span className="text-xs font-medium uppercase tracking-widest">Asagi Kaydir</span>
           <div className="w-[1px] h-12 bg-black/20"></div>
         </div>
       </div>

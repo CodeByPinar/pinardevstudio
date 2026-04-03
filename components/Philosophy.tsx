@@ -4,16 +4,16 @@ import { Check, ArrowRight, Code2 } from 'lucide-react';
 
 const Philosophy: React.FC = () => {
   const values = [
-    { title: "Clean Architecture & SOLID", desc: "Building scalable, maintainable systems by strictly adhering to best coding practices." },
-    { title: "Agile & Scrum", desc: "Collaborating effectively within teams to deliver iterative, high-quality software solutions." },
-    { title: "Continuous Learning", desc: "Passionately updating technical knowledge to stay ahead in the evolving tech landscape." }
+    { title: "Clean Architecture ve SOLID", desc: "En iyi kodlama pratikleriyle olceklenebilir ve surdurulebilir sistemler gelistiririm." },
+    { title: "Agile ve Scrum", desc: "Ekiplerle etkili calisip iteratif ve yuksek kaliteli urun teslim ederim." },
+    { title: "Surekli Ogrenme", desc: "Gelisen teknolojiye ayak uydurmak icin teknik bilgi birikimimi surekli guncellerim." }
   ];
 
   return (
     <section className="py-32 bg-white relative overflow-hidden" id="about">
       {/* Decorative large watermark text */}
       <div className="hidden lg:block absolute top-1/2 -right-20 transform -translate-y-1/2 text-[15rem] xl:text-[20rem] font-black text-gray-50 pointer-events-none select-none leading-none z-0">
-        CODE
+        KOD
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -25,7 +25,7 @@ const Philosophy: React.FC = () => {
              <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-[6px] border-white transform rotate-[-2deg] hover:rotate-0 transition-transform duration-700 bg-black group">
                 <img 
                   src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop" 
-                  alt="Tech Workspace" 
+                  alt="Teknoloji Calisma Alani" 
                   className="w-full h-[500px] lg:h-[600px] object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                 />
                 
@@ -42,12 +42,12 @@ const Philosophy: React.FC = () => {
                               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-lime opacity-75"></span>
                               <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-lime"></span>
                             </span>
-                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">System Online</span>
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">Sistem Aktif</span>
                          </div>
                          
-                         <h3 className="text-3xl font-extrabold text-white mb-2 tracking-tight">Tech Workspace</h3>
+                         <h3 className="text-3xl font-extrabold text-white mb-2 tracking-tight">Teknoloji Alani</h3>
                          <p className="text-gray-300 text-sm font-medium border-l-2 border-brand-lime pl-3">
-                           Building the future,<br/> one line at a time.
+                           Gelecegi birlikte,<br/> satir satir insa ediyoruz.
                          </p>
                       </div>
 
@@ -62,14 +62,14 @@ const Philosophy: React.FC = () => {
              {/* Floating Badge 1: Experience (Top Right) */}
              <div className="absolute -top-6 -right-4 lg:-right-10 bg-white p-6 rounded-2xl shadow-[8px_8px_0px_rgba(0,0,0,1)] border-2 border-black z-20 animate-float">
                 <p className="text-5xl font-extrabold text-black mb-1">04<span className="text-brand-lime">+</span></p>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Years of<br/>Experience</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Yillik<br/>Deneyim</p>
              </div>
 
              {/* Floating Badge 2: Tech (Bottom Left) */}
              <div className="absolute -bottom-6 -left-4 lg:-left-10 bg-brand-lime p-6 lg:p-8 rounded-full border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] z-20 animate-float-delayed flex items-center justify-center w-32 h-32 lg:w-40 lg:h-40">
                 <div className="text-center">
                    <p className="text-2xl lg:text-3xl font-black text-black leading-none">.NET</p>
-                   <p className="text-[10px] lg:text-xs font-bold uppercase mt-1">Core Expert</p>
+                   <p className="text-[10px] lg:text-xs font-bold uppercase mt-1">Core Uzmani</p>
                 </div>
              </div>
 
@@ -81,15 +81,15 @@ const Philosophy: React.FC = () => {
           <div className="order-1 lg:order-2">
              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-bold uppercase tracking-wider mb-8 text-gray-800 border border-gray-200">
                 <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></span>
-                My Approach
+                Yaklasimim
              </div>
             
             <h2 className="text-5xl md:text-6xl font-extrabold text-black mb-8 leading-[1.05] tracking-tight">
-              Engineering solutions with <span className="relative inline-block text-brand-black px-2 italic bg-brand-lime skew-x-[-10deg]">precision.</span>
+              Cozumleri <span className="relative inline-block text-brand-black px-2 italic bg-brand-lime skew-x-[-10deg]">titizlikle</span> gelistiriyorum.
             </h2>
             
             <p className="text-xl text-gray-600 mb-10 leading-relaxed font-medium">
-              I am dedicated to delivering quality solutions by strictly adhering to best practices like Clean Architecture. My expertise lies in designing microservice architectures, integrating secure JWT authentication, and optimizing full-stack performance.
+              Clean Architecture gibi en iyi pratiklere bagli kalarak kaliteli cozumler uretiyorum. Mikroservis mimarisi, guvenli JWT kimlik dogrulama ve full-stack performans optimizasyonu temel uzmanlik alanlarimdir.
             </p>
 
             <div className="space-y-8 mb-12">
@@ -107,7 +107,7 @@ const Philosophy: React.FC = () => {
             </div>
 
             <a href="#contact" className="group inline-flex items-center gap-3 text-lg font-bold border-b-2 border-black pb-1 hover:text-brand-green hover:border-brand-green transition-all">
-              <span>Let's collaborate</span>
+              <span>Birlikte calisalim</span>
               <ArrowRight className="group-hover:translate-x-2 transition-transform" />
             </a>
           </div>

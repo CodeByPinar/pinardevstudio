@@ -16,7 +16,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
       document.body.style.overflow = 'hidden';
       // Simulate SEO Title Update
       const prevTitle = document.title;
-      document.title = `${post.title} | Pınar Tech Blog`;
+      document.title = `${post.title} | Pinar Tech Yazilar`;
       
       return () => {
         document.body.style.overflow = '';
@@ -48,7 +48,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
 
   const author = post.author || {
       name: "Pınar Topuz",
-      role: "Full-Stack Developer",
+      role: "Full-Stack Gelistirici",
       avatar: "https://ui-avatars.com/api/?name=Pinar+Topuz&background=000&color=fff"
   };
 
@@ -118,7 +118,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
                 </div>
                 <div className="flex items-center gap-2">
                     <Eye size={18} />
-                    <span>{post.views ? post.views.toLocaleString() : '1,204'} Views</span>
+                    <span>{post.views ? post.views.toLocaleString() : '1,204'} Goruntulenme</span>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
 
             {/* Footer Author Bio */}
             <div className="mt-16 pt-10 border-t-2 border-gray-100">
-                <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-6">About the Author</h3>
+                <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-6">Yazar Hakkinda</h3>
                 <div className="flex items-start gap-6 bg-gray-50 p-6 rounded-2xl">
                     <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-white shadow-md">
                         <img src={author.avatar} alt={author.name} className="w-full h-full object-cover"/>
@@ -138,7 +138,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ post, onClose }) => {
                         <p className="font-bold text-xl text-black mb-1">{author.name}</p>
                         <p className="text-sm text-brand-green font-bold uppercase mb-3">{author.role}</p>
                         <p className="text-gray-600 text-sm leading-relaxed">
-                            Experienced Full-Stack Developer specializing in .NET and React ecosystems. Passionate about clean architecture, AI integration, and sharing technical knowledge with the community.
+                          .NET ve React ekosistemlerinde uzmanlasmis deneyimli bir Full-Stack gelistirici. Clean architecture, yapay zeka entegrasyonu ve teknik bilgi paylasimi konularinda tutkuludur.
                         </p>
                     </div>
                 </div>

@@ -29,8 +29,9 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onBack }) => {
 
       const data = await response.json();
 
-      if (data.success) {
-        onLogin(data.user);
+      if (data.success && data.token) {
+        localStorage.setItem('admin_token', data.token);
+        onLogin({ ...data.user, token: data.token });
       } else {
         setError(data.message || 'Giriş başarısız');
       }
@@ -72,8 +73,8 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onBack }) => {
                         </div>
                     </div>
                     
-                    <h2 className="text-3xl font-black text-black mt-6 tracking-tight">Welcome Back</h2>
-                    <p className="text-gray-500 font-medium mt-2">Please enter your credentials</p>
+                    <h2 className="text-3xl font-black text-black mt-6 tracking-tight">Tekrar Hos Geldiniz</h2>
+                    <p className="text-gray-500 font-medium mt-2">Lutfen giris bilgilerinizi girin</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
@@ -82,7 +83,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onBack }) => {
                             label="Username" 
                             value={username} 
                             onChange={(e) => setUsername(e.target.value)} 
-                            placeholder="admin"
+                            placeholder="yonetici"
                             className="bg-white/50 border-gray-200 focus:bg-white focus:border-black transition-all"
                         />
                     </div>
@@ -114,10 +115,10 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onBack }) => {
                         {isLoading ? (
                             <div className="flex items-center gap-2">
                                 <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
-                                <span>Verifying...</span>
+                                <span>Dogrulaniyor...</span>
                             </div>
                         ) : (
-                            'Sign In'
+                              'Giris Yap'
                         )}
                     </Button>
                 </form>
@@ -128,14 +129,14 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, onBack }) => {
                     className="group flex items-center justify-center gap-2 mx-auto text-sm font-bold text-gray-400 hover:text-black transition-colors px-4 py-2 rounded-full hover:bg-gray-100/50"
                   >
                       <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                      Back to Portfolio
+                      Portfolyoya Don
                   </button>
                 </div>
             </div>
             
             {/* Footer Copyright */}
             <div className="text-center mt-8 text-gray-400 text-xs font-medium">
-                &copy; {new Date().getFullYear()} Pınar Topuz. All rights reserved.
+                &copy; {new Date().getFullYear()} Pinar Topuz. Tum haklari saklidir.
             </div>
         </div>
     </div>
